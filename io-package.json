@@ -1,0 +1,112 @@
+{
+    "common": {
+        "name": "gigaset-elements",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Gigaset Elements",
+        "titleLang": {
+            "en": "Gigaset Elements",
+            "de": "Gigaset Elements",
+            "ru": "Элементы Gigaset",
+            "pt": "Elementos Gigaset",
+            "nl": "Gigaset Elements",
+            "fr": "Éléments Gigaset",
+            "it": "Elementi Gigaset",
+            "es": "Elementos de Gigaset",
+            "pl": "Elementy Gigaset",
+            "zh-cn": "千兆元素"
+        },
+        "desc": {
+            "en": "Adapter for Gigaset Elements",
+            "de": "Adapter für Gigaset Elements",
+            "ru": "Адаптер для Gigaset Elements",
+            "pt": "Adaptador para Gigaset Elements",
+            "nl": "Adapter voor Gigaset Elements",
+            "fr": "Adaptateur pour Gigaset Elements",
+            "it": "Adattatore per Gigaset Elements",
+            "es": "Adaptador para Gigaset Elements",
+            "pl": "Adapter do Gigaset Elements",
+            "zh-cn": "用于 Gigaset Elements 的适配器"
+        },
+        "authors": ["matthsc <matthsc@gmx.net>"],
+        "keywords": ["gigaset elements", "security", "alarm"],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "gigaset-elements.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/matthsc/ioBroker.gigaset-elements/main/admin/gigaset-elements.png",
+        "readme": "https://github.com/matthsc/ioBroker.gigaset-elements/blob/main/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "alarm",
+        "compact": true,
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "materialize": true,
+        "materializeTab": true,
+        "adminTab": {
+            "singleton": true,
+            "name": {
+                "en": "Gigaset Elements",
+                "de": "Gigaset Elements",
+                "ru": "Элементы Gigaset",
+                "pt": "Elementos Gigaset",
+                "nl": "Gigaset Elements",
+                "fr": "Éléments Gigaset",
+                "it": "Elementi Gigaset",
+                "es": "Elementos de Gigaset",
+                "pl": "Elementy Gigaset",
+                "zh-cn": "千兆元素"
+            },
+            "link": "",
+            "fa-icon": "info"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ]
+    },
+    "native": {
+        "option1": true,
+        "option2": "42"
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}
