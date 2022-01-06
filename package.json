@@ -17,6 +17,9 @@
     "type": "git",
     "url": "https://github.com/matthsc/ioBroker.gigaset-elements"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^2.5.1"
   },
