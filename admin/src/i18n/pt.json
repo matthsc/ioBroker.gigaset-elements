@@ -1,5 +1,16 @@
 {
     "gigaset-elements adapter settings": "Configurações do adaptador para gigaset-elements",
-    "option1": "Opção 1",
-    "option2": "opção 2"
+    "connection": "Configurações de conexão para a nuvem Gigaset Elements",
+    "email": "Endereço de e-mail",
+    "email_description": "Endereço de e-mail para conexão com a nuvem da GE",
+    "password": "Senha",
+    "password_description": "Senha para o endereço de e-mail",
+    "authInterval": "Intervalo de autenticação",
+    "authInterval_description": "Número de horas após as quais a conta precisa ser autenticada novamente na nuvem. ",
+    "intervals": "Intervalos de sondagem",
+    "intervals_details": "A nuvem do Gigaset Elements precisa ser pesquisada periodicamente para ter eventos e estados atualizados no adaptador. ",
+    "eventInterval": "Intervalo do evento",
+    "eventInterval_description": "Segundos após os quais pesquisar dados de eventos como janela/porta aberta/fechada, alarmes, ...",
+    "elementInterval": "Intervalo do elemento",
+    "elementInterval_description": "Minutos após os quais pesquisar dados do elemento/sensor, como temperatura, pressão do ar, ..."
 }

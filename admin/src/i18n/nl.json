@@ -1,5 +1,16 @@
 {
     "gigaset-elements adapter settings": "Adapterinstellingen voor gigaset-elements",
-    "option1": "Optie 1",
-    "option2": "Optie 2"
+    "connection": "Verbindingsinstellingen voor Gigaset Elements cloud",
+    "email": "E-mailadres",
+    "email_description": "E-mailadres om verbinding te maken met GE cloud",
+    "password": "Wachtwoord",
+    "password_description": "Wachtwoord voor het e-mailadres",
+    "authInterval": "Verificatie-interval",
+    "authInterval_description": "Aantal uren waarna het account opnieuw moet worden geverifieerd in de cloud. ",
+    "intervals": "Poll-intervallen",
+    "intervals_details": "De Gigaset Elements-cloud moet regelmatig worden gepold om gebeurtenissen en statussen in de adapter te laten bijwerken. ",
+    "eventInterval": "Gebeurtenis interval",
+    "eventInterval_description": "Seconden waarna gebeurtenisgegevens zoals raam/deur open/dicht, alarmen, ...",
+    "elementInterval": "Element interval",
+    "elementInterval_description": "Minuten waarna gegevens van elementen/sensoren zoals temperatuur, luchtdruk, ..."
 }

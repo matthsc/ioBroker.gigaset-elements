@@ -57,34 +57,26 @@
         "connectionType": "cloud",
         "dataSource": "poll",
         "materialize": true,
-        "materializeTab": true,
-        "adminTab": {
-            "singleton": true,
-            "name": {
-                "en": "Gigaset Elements",
-                "de": "Gigaset Elements",
-                "ru": "Элементы Gigaset",
-                "pt": "Elementos Gigaset",
-                "nl": "Gigaset Elements",
-                "fr": "Éléments Gigaset",
-                "it": "Elementi Gigaset",
-                "es": "Elementos de Gigaset",
-                "pl": "Elementy Gigaset",
-                "zh-cn": "千兆元素"
-            },
-            "link": "",
-            "fa-icon": "info"
-        },
+        "globalDependencies": [
+            {
+                "admin": ">=5.0.0"
+            }
+        ],
         "dependencies": [
             {
-                "js-controller": ">=2.0.0"
+                "js-controller": ">=3.1.0"
             }
         ]
     },
     "native": {
-        "option1": true,
-        "option2": "42"
+        "email": "",
+        "pass": "",
+        "authInterval": 6,
+        "eventInterval": 60,
+        "elementInterval": 5
     },
+    "protectedNative": ["pass"],
+    "encryptedNative": ["pass"],
     "objects": [],
     "instanceObjects": [
         {

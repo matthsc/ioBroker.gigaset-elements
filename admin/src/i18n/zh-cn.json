@@ -1,5 +1,16 @@
 {
     "gigaset-elements adapter settings": "gigaset-elements的适配器设置",
-    "option1": "选项1",
-    "option2": "选项2"
+    "connection": "Gigaset Elements 云的连接设置",
+    "email": "电子邮件地址",
+    "email_description": "用于连接 GE 云的电子邮件地址",
+    "password": "密码",
+    "password_description": "电子邮件地址的密码",
+    "authInterval": "认证间隔",
+    "authInterval_description": "帐户需要重新验证到云的小时数。",
+    "intervals": "轮询间隔",
+    "intervals_details": "需要定期轮询 Gigaset Elements 云以在适配器中更新事件和状态。",
+    "eventInterval": "事件间隔",
+    "eventInterval_description": "几秒钟后轮询事件数据，如窗户/门打开/关闭、警报、...",
+    "elementInterval": "元素间隔",
+    "elementInterval_description": "几分钟后轮询元件/传感器数据，如温度、气压……"
 }

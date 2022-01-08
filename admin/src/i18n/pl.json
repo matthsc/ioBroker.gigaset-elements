@@ -1,5 +1,16 @@
 {
     "gigaset-elements adapter settings": "Ustawienia adaptera dla gigaset-elements",
-    "option1": "opcja 1",
-    "option2": "Opcja 2"
+    "connection": "Ustawienia połączenia dla chmury Gigaset Elements",
+    "email": "Adres e-mail",
+    "email_description": "Adres e-mail do połączenia z chmurą GE",
+    "password": "Hasło",
+    "password_description": "Hasło do adresu e-mail",
+    "authInterval": "Interwał uwierzytelniania",
+    "authInterval_description": "Liczba godzin, po których konto musi zostać ponownie uwierzytelnione w chmurze. ",
+    "intervals": "Interwały ankiet",
+    "intervals_details": "Chmura Gigaset Elements musi być okresowo odpytywana, aby zdarzenia i stany były aktualizowane w adapterze. ",
+    "eventInterval": "Interwał wydarzeń",
+    "eventInterval_description": "Sekundy, po których należy odpytywać dane zdarzenia, takie jak otwarcie/zamknięcie okna/drzwi, alarmy, ...",
+    "elementInterval": "Interwał elementów",
+    "elementInterval_description": "Minuty, po których należy odpytywać dane elementu/czujnika, takie jak temperatura, ciśnienie powietrza, ..."
 }

@@ -1,5 +1,16 @@
 {
     "gigaset-elements adapter settings": "Adapter settings for gigaset-elements",
-    "option1": "option1",
-    "option2": "option2"
+    "connection": "Connection settings for Gigaset Elements cloud",
+    "email": "Email address",
+    "email_description": "Email address for connecting to GE cloud",
+    "password": "Password",
+    "password_description": "Password for the email address",
+    "authInterval": "Authentication interval",
+    "authInterval_description": "Number of hours after which the account needs to reauthenticate to the cloud. Defaults to 6.",
+    "intervals": "Poll intervals",
+    "intervals_details": "Gigaset Elements cloud needs to be polled periodically to have events and states updated in the adapter. Here you can specify the intervals in which certain data is updated. Setting an interval to 0 disables polling of this data.",
+    "eventInterval": "Event interval",
+    "eventInterval_description": "Seconds after which to poll event data like window/door open/close, alarms, ...",
+    "elementInterval": "Element interval",
+    "elementInterval_description": "Minutes after which to poll element/sensor data like temperature, air pressure, ..."
 }

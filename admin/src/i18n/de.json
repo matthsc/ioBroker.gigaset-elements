@@ -1,5 +1,16 @@
 {
     "gigaset-elements adapter settings": "Adaptereinstellungen für gigaset-elements",
-    "option1": "Option 1",
-    "option2": "Option 2"
+    "connection": "Verbindungseinstellungen für Gigaset Elements Cloud",
+    "email": "E-Mail-Addresse",
+    "email_description": "E-Mail-Adresse für die Verbindung mit der GE-Cloud",
+    "password": "Passwort",
+    "password_description": "Passwort für die E-Mail-Adresse",
+    "authInterval": "Authentifizierungsintervall",
+    "authInterval_description": "Anzahl der Stunden, nach denen sich das Konto erneut bei der Cloud authentifizieren muss. ",
+    "intervals": "Abfrageintervalle",
+    "intervals_details": "Gigaset Elements cloud muss regelmäßig abgefragt werden, damit Ereignisse und Zustände im Adapter aktualisiert werden. ",
+    "eventInterval": "Ereignisintervall",
+    "eventInterval_description": "Sekunden zum Abrufen von Ereignisdaten wie Öffnen/Schließen von Fenstern/Türen, Alarme, ...",
+    "elementInterval": "Elementintervall",
+    "elementInterval_description": "Minuten zum Abrufen von Element-/Sensordaten wie Temperatur, Luftdruck, ..."
 }

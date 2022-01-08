@@ -5,18 +5,29 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
-
-// Load your modules here, e.g.:
-// import * as fs from "fs";
+// Load your modules here
+import { EndpointError, GigasetElementsApi, NetworkError } from "gigaset-elements-api";
+import { createOrUpdateBasestations, createOrUpdateElements, processEvents, updateElements } from "./adapter";
 
 class GigasetElements extends utils.Adapter {
+    /** api instance */
+    private api!: GigasetElementsApi;
+    /** time of last events retrieval */
+    private lastEvent!: number;
+    /** timeout for periodic events retrieval */
+    private eventsTimeout!: NodeJS.Timeout;
+    /** timeout for periodic elements retrieval */
+    private elementsTimeout!: NodeJS.Timeout;
+    /** whether the adapter is terminating */
+    private terminating = false;
+
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
             ...options,
             name: "gigaset-elements",
         });
         this.on("ready", this.onReady.bind(this));
-        this.on("stateChange", this.onStateChange.bind(this));
+        // this.on("stateChange", this.onStateChange.bind(this));
         // this.on("objectChange", this.onObjectChange.bind(this));
         // this.on("message", this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
@@ -25,61 +36,205 @@ class GigasetElements extends utils.Adapter {
     /**
      * Is called when databases are connected and adapter received configuration.
      */
-    private async onReady(): Promise<void> {
-        // Initialize your adapter here
+    private onReady = async (): Promise<void> => {
+        this.log.debug(
+            `configuration: ${JSON.stringify({
+                ...this.config,
+                pass: this.config.pass && this.config.pass !== "" ? "***" : "<empty>",
+            })}`,
+        );
 
         // Reset the connection indicator during startup
-        this.setState("info.connection", false, true);
+        await this.setStateAsync("info.connection", false, true);
 
-        // The adapters config (in the instance object everything under the attribute "native") is accessible via
-        // this.config:
-        this.log.info("config option1: " + this.config.option1);
-        this.log.info("config option2: " + this.config.option2);
+        // check options (email/password)
+        if (!this.config.email || !this.config.pass) {
+            this.log.error("Login information missing. Please configure email and password in adapter settings.");
+            return;
+        }
 
-        /*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-        await this.setObjectNotExistsAsync("testVariable", {
-            type: "state",
-            common: {
-                name: "testVariable",
-                type: "boolean",
-                role: "indicator",
-                read: true,
-                write: true,
-            },
-            native: {},
+        // init gigaset elements api
+        this.api = new GigasetElementsApi({
+            email: this.config.email,
+            password: this.config.pass,
+            authorizeHours: this.config.authInterval,
+            requestLogger:
+                this.log.level === "silly"
+                    ? (message: string) => {
+                          this.log.silly(message);
+                      }
+                    : undefined,
         });
 
-        // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-        this.subscribeStates("testVariable");
-        // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-        // this.subscribeStates("lights.*");
-        // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-        // this.subscribeStates("*");
+        // connect to GE api
+        await this.setupConnection();
+    };
 
-        /*
-			setState examples
-			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-        // the variable testVariable is set to true as command (ack=false)
-        await this.setStateAsync("testVariable", true);
+    private getErrorMessage(err: unknown): string {
+        if (err instanceof NetworkError) {
+            return `Error connecting to Gigaset-Elements API: ${err.message}`;
+        } else if (err instanceof EndpointError) {
+            return `Error from Gigaset-Elements API: ${err.statusCode}, ${err.method} ${err.uri} ${err.message}`;
+        } else if ((err as Error).message) {
+            return (err as Error).message;
+        } else if (typeof err === "string") {
+            return err;
+        }
 
-        // same thing, but the value is flagged "ack"
-        // ack should be always set to true if the value is received from or acknowledged from the target system
-        await this.setStateAsync("testVariable", { val: true, ack: true });
+        return err as string;
+    }
 
-        // same thing, but the state is deleted after 30s (getState will return null afterwards)
-        await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
+    /** setup connection to GE api */
+    private setupConnection = async (): Promise<void> => {
+        this.log.info("Connecting to Gigaset Elements API...");
 
-        // examples for the checkPassword/checkGroup functions
-        let result = await this.checkPasswordAsync("admin", "iobroker");
-        this.log.info("check user admin pw iobroker: " + result);
+        // check for maintenance
+        let hasApiConnectionError = false;
+        try {
+            hasApiConnectionError = await this.api.isMaintenance();
+            if (hasApiConnectionError) {
+                this.log.info("API is under maintenance");
+            }
+        } catch (err: unknown) {
+            hasApiConnectionError = true;
+            this.log.error(this.getErrorMessage(err));
+        }
+        if (hasApiConnectionError) {
+            this.log.info("Retrying connection in 5 minutes");
+            setTimeout(this.setupConnection, 5 * 60 * 1000);
+            return;
+        }
 
-        result = await this.checkGroupAsync("admin", "admin");
-        this.log.info("check group user admin group admin: " + result);
+        // authorize
+        try {
+            this.log.info("Authorizing...");
+            await this.api.authorize();
+            await this.setStateAsync("info.connection", true, true);
+        } catch (err) {
+            const message = this.getErrorMessage(err);
+            this.log.error(message);
+            this.terminate(message);
+            return;
+        }
+
+        // initialize last event date
+        this.lastEvent = Date.now();
+
+        try {
+            // load base stations
+            this.log.info("Loading basestation data...");
+            const baseStations = await this.api.getBaseStations();
+            await createOrUpdateBasestations(this, baseStations);
+
+            // load elements
+            this.log.info("Loading elements data...");
+            const { bs01 } = await this.api.getElements();
+            await createOrUpdateElements(this, bs01);
+
+            // set up timers for periodic events and elements retrieval
+            this.log.info("Starting timers for periodic events/elements retrieval...");
+            this.stopTimers(); // stop timers, in case they are still scheduled while reconnecting
+            this.setupEventsRefresh();
+            this.setupElementsRefresh();
+
+            this.log.info("All done, adapter is running");
+        } catch (err) {
+            this.log.error(`setupConnection: ${this.getErrorMessage(err)}`);
+            this.log.info("restarting adapter");
+            this.restart();
+        }
+    };
+
+    /** set up periodic elements retrieval timer */
+    private setupElementsRefresh(): void {
+        if (this.config.elementInterval <= 0 || this.terminating) return;
+
+        this.elementsTimeout = setTimeout(this.refreshElements, this.config.elementInterval * 60 * 1000);
+    }
+
+    /** retrieve and update elements */
+    private refreshElements = async (): Promise<void> => {
+        this.log.debug("Processing elements");
+        try {
+            const elements = await this.api.getElements();
+            await Promise.all(elements.bs01.map((bs) => updateElements(this, bs.subelements)));
+        } catch (err: any) {
+            this.handleRefreshError("refreshEvents", err);
+        }
+
+        // schedule next retrieval
+        this.setupElementsRefresh();
+    };
+
+    /** set up periodic events retrieval timer */
+    private setupEventsRefresh(): void {
+        if (this.config.eventInterval <= 0 || this.terminating) return;
+
+        this.eventsTimeout = setTimeout(this.refreshEvents, this.config.eventInterval * 1000);
+    }
+
+    /** retrieve and process events */
+    private refreshEvents = async (): Promise<void> => {
+        this.log.debug("Processing events");
+        try {
+            const start = Date.now();
+            const { events } = await this.api.getRecentEvents(this.lastEvent);
+            await processEvents(this, events);
+            this.lastEvent = start;
+        } catch (err: any) {
+            this.handleRefreshError("refreshEvents", err);
+        }
+
+        // schedule next retrieval
+        this.setupEventsRefresh();
+    };
+
+    /** error handling for errors during periodic refresh timers */
+    private async handleRefreshError(source: string, err: Error): Promise<void> {
+        let message: string;
+        if (err instanceof NetworkError) {
+            message = `Network error`;
+        } else if (err instanceof EndpointError) {
+            message = `Endpoint error ${err.statusCode}, ${err.method} ${err.uri}`;
+
+            if (err.statusCode === 401)
+                // reconnect if we get an authorization error
+                // use setImmediate here since the refreshXXX methods schedule the next timer after this method exits
+                setImmediate(() => {
+                    this.log.info("Encountered 401 Unauthorized error, stopping timers and reconnecting again");
+                    this.stopTimers();
+                    this.setupConnection();
+                });
+        } else {
+            message = "Unknown error";
+        }
+        this.log.error(`${source} - ${message}: ${err.message} ${err.stack}`);
+
+        // check for maintenance mode
+        let hasApiConnectionError = false;
+        try {
+            hasApiConnectionError = await this.api.isMaintenance();
+            if (hasApiConnectionError) {
+                this.log.info("API is under maintenance");
+            }
+        } catch {
+            hasApiConnectionError = true;
+        }
+        if (hasApiConnectionError) {
+            this.log.info("Stopping timers and retrying connection in 5 minutes");
+            // use setImmediate here since the refreshXXX methods schedule the next timer after this method exits
+            setImmediate(() => {
+                this.stopTimers();
+                setTimeout(this.setupConnection, 5 * 60 * 1000);
+            });
+        }
+    }
+
+    /** stops timers */
+
+    private stopTimers(): void {
+        clearTimeout(this.eventsTimeout);
+        clearTimeout(this.elementsTimeout);
     }
 
     /**
@@ -87,14 +242,12 @@ class GigasetElements extends utils.Adapter {
      */
     private onUnload(callback: () => void): void {
         try {
-            // Here you must clear all timeouts or intervals that may still be active
-            // clearTimeout(timeout1);
-            // clearTimeout(timeout2);
-            // ...
-            // clearInterval(interval1);
-
+            this.terminating = true;
+            this.stopTimers();
+            this.log.info("cleaned everything up...");
             callback();
-        } catch (e) {
+        } catch (e: any) {
+            this.log.error(e.stack);
             callback();
         }
     }
@@ -114,18 +267,18 @@ class GigasetElements extends utils.Adapter {
     //     }
     // }
 
-    /**
-     * Is called if a subscribed state changes
-     */
-    private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
-        if (state) {
-            // The state was changed
-            this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-        } else {
-            // The state was deleted
-            this.log.info(`state ${id} deleted`);
-        }
-    }
+    // /**
+    //  * Is called if a subscribed state changes
+    //  */
+    // private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
+    //     if (state) {
+    //         // The state was changed
+    //         this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+    //     } else {
+    //         // The state was deleted
+    //         this.log.info(`state ${id} deleted`);
+    //     }
+    // }
 
     // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
     // /**
