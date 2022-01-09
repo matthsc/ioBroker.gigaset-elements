@@ -99,6 +99,19 @@
                 "def": false
             },
             "native": {}
+        },
+        {
+            "_id": "info.maintenance",
+            "type": "state",
+            "common": {
+                "role": "indicator.maintenance",
+                "name": "Gigaset Elements cloud in maintenance mode",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
         }
     ]
 }

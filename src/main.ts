@@ -52,8 +52,11 @@ class GigasetElements extends utils.Adapter {
             })}`,
         );
 
-        // Reset the connection indicator during startup
-        await this.setStateAsync("info.connection", false, true);
+        // Reset connection indicators during startup
+        await Promise.all([
+            this.setStateAsync("info.connection", false, true),
+            this.setStateChangedAsync("info.maintenance", false, true),
+        ]);
 
         // check options (email/password)
         if (!this.config.email || !this.config.pass) {
@@ -95,23 +98,32 @@ class GigasetElements extends utils.Adapter {
         return err as string;
     }
 
+    /**
+     * @returns true if GE cloud is under maintenance
+     */
+    private async checkAndUpdateMaintenanceMode(): Promise<boolean> {
+        const isMaintenance = await this.api.isMaintenance();
+        if (isMaintenance) {
+            this.log.info("Gigaset Elements cloud is under maintenance");
+        }
+        await this.setStateChangedAsync("info.maintenance", isMaintenance, true);
+        return isMaintenance;
+    }
+
     /** setup connection to GE api */
     private setupConnection = async (): Promise<void> => {
         this.log.debug("Connecting to Gigaset Elements cloud...");
 
         // check for maintenance
-        let hasApiConnectionError = false;
+        let maintenanceOrConnectionError = false;
         try {
-            hasApiConnectionError = await this.api.isMaintenance();
-            if (hasApiConnectionError) {
-                this.log.info("API is under maintenance");
-            }
+            maintenanceOrConnectionError = await this.checkAndUpdateMaintenanceMode();
         } catch (err: unknown) {
-            hasApiConnectionError = true;
+            maintenanceOrConnectionError = true;
             this.log.error(this.getErrorMessage(err));
         }
-        if (hasApiConnectionError) {
-            this.log.info("Retrying connection in 5 minutes");
+        if (maintenanceOrConnectionError) {
+            this.log.info("Retrying connection setup in 5 minutes");
             setTimeout(this.setupConnection, 5 * 60 * 1000);
             return;
         }
@@ -193,16 +205,14 @@ class GigasetElements extends utils.Adapter {
         this.log.error(`${source} - ${message}: ${err.message} ${err.stack}`);
 
         // check for maintenance mode
-        let hasApiConnectionError = false;
+        let maintenanceOrConnectionError = false;
         try {
-            hasApiConnectionError = await this.api.isMaintenance();
-            if (hasApiConnectionError) {
-                this.log.info("Gigaset Elements cloud is under maintenance");
-            }
-        } catch {
-            hasApiConnectionError = true;
+            maintenanceOrConnectionError = await this.checkAndUpdateMaintenanceMode();
+        } catch (err: unknown) {
+            maintenanceOrConnectionError = true;
+            this.log.error(this.getErrorMessage(err));
         }
-        if (hasApiConnectionError) {
+        if (maintenanceOrConnectionError) {
             this.log.info("Stopping timers and retrying connection in 5 minutes");
             this.stopTimers();
             setTimeout(this.setupConnection, 5 * 60 * 1000);
