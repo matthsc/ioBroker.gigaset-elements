@@ -9,17 +9,25 @@ import * as utils from "@iobroker/adapter-core";
 import { EndpointError, GigasetElementsApi, NetworkError } from "gigaset-elements-api";
 import { createOrUpdateBasestations, createOrUpdateElements, processEvents, updateElements } from "./adapter";
 
+interface ITimeoutsKeys {
+    events: NodeJS.Timeout;
+    elements: NodeJS.Timeout;
+}
+type ITimeouts = {
+    [key in keyof ITimeoutsKeys]: NodeJS.Timeout;
+} & ITimeoutsKeys;
+
 class GigasetElements extends utils.Adapter {
     /** api instance */
     private api!: GigasetElementsApi;
     /** time of last events retrieval */
     private lastEvent!: number;
-    /** timeout for periodic events retrieval */
-    private eventsTimeout!: NodeJS.Timeout;
-    /** timeout for periodic elements retrieval */
-    private elementsTimeout!: NodeJS.Timeout;
+    /** timeouts */
+    private timeouts = Object.create(null) as ITimeouts;
     /** whether the adapter is terminating */
     private terminating = false;
+    /** whether we should stop scheduling new jobs, i.e. when cloud is under maintenance */
+    private stopScheduling = true;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -49,7 +57,9 @@ class GigasetElements extends utils.Adapter {
 
         // check options (email/password)
         if (!this.config.email || !this.config.pass) {
-            this.log.error("Login information missing. Please configure email and password in adapter settings.");
+            this.log.error(
+                "Login information for Gigaset Elements cloud missing. Please configure email and password in adapter settings.",
+            );
             return;
         }
 
@@ -66,15 +76,16 @@ class GigasetElements extends utils.Adapter {
                     : undefined,
         });
 
-        // connect to GE api
+        // connect to GE cloud
         await this.setupConnection();
     };
 
+    /** helper method for determining human-friendly error messages */
     private getErrorMessage(err: unknown): string {
         if (err instanceof NetworkError) {
-            return `Error connecting to Gigaset-Elements API: ${err.message}`;
+            return `Error connecting to Gigaset Elements cloud: ${err.message}`;
         } else if (err instanceof EndpointError) {
-            return `Error from Gigaset-Elements API: ${err.statusCode}, ${err.method} ${err.uri} ${err.message}`;
+            return `Error from Gigaset Elements cloud: ${err.statusCode}, ${err.method} ${err.uri} ${err.message}`;
         } else if ((err as Error).message) {
             return (err as Error).message;
         } else if (typeof err === "string") {
@@ -86,7 +97,7 @@ class GigasetElements extends utils.Adapter {
 
     /** setup connection to GE api */
     private setupConnection = async (): Promise<void> => {
-        this.log.info("Connecting to Gigaset Elements API...");
+        this.log.debug("Connecting to Gigaset Elements cloud...");
 
         // check for maintenance
         let hasApiConnectionError = false;
@@ -107,11 +118,11 @@ class GigasetElements extends utils.Adapter {
 
         // authorize
         try {
-            this.log.info("Authorizing...");
+            this.log.debug("Authorizing...");
             await this.api.authorize();
             await this.setStateAsync("info.connection", true, true);
         } catch (err) {
-            const message = this.getErrorMessage(err);
+            const message = "Error authorizing with Gigaset Elements cloud: " + this.getErrorMessage(err);
             this.log.error(message);
             this.terminate(message);
             return;
@@ -122,71 +133,44 @@ class GigasetElements extends utils.Adapter {
 
         try {
             // load base stations
-            this.log.info("Loading basestation data...");
+            this.log.debug("Loading basestation data...");
             const baseStations = await this.api.getBaseStations();
             await createOrUpdateBasestations(this, baseStations);
 
             // load elements
-            this.log.info("Loading elements data...");
+            this.log.debug("Loading elements data...");
             const { bs01 } = await this.api.getElements();
             await createOrUpdateElements(this, bs01);
 
             // set up timers for periodic events and elements retrieval
-            this.log.info("Starting timers for periodic events/elements retrieval...");
-            this.stopTimers(); // stop timers, in case they are still scheduled while reconnecting
-            this.setupEventsRefresh();
-            this.setupElementsRefresh();
+            this.log.debug("Starting timers for periodic events/elements retrieval...");
+            this.stopTimers(); // stop timers, in case something is still scheduled while reconnecting
+            this.stopScheduling = false; // enebale scheduling of timers after stopTimers()
+            this.runAndSchedule("elements", this.config.elementInterval * 60, this.refreshElements, true);
+            this.runAndSchedule("events", this.config.eventInterval, this.refreshEvents);
 
-            this.log.info("All done, adapter is running");
+            this.log.info("Successfully connected to Gigaset Elements cloud and initialized states");
         } catch (err) {
-            this.log.error(`setupConnection: ${this.getErrorMessage(err)}`);
-            this.log.info("restarting adapter");
+            this.log.error(`Error during connection setup: ${this.getErrorMessage(err)}`);
+            this.log.info("Restarting...");
             this.restart();
         }
     };
 
-    /** set up periodic elements retrieval timer */
-    private setupElementsRefresh(): void {
-        if (this.config.elementInterval <= 0 || this.terminating) return;
-
-        this.elementsTimeout = setTimeout(this.refreshElements, this.config.elementInterval * 60 * 1000);
-    }
-
     /** retrieve and update elements */
     private refreshElements = async (): Promise<void> => {
-        this.log.debug("Processing elements");
-        try {
-            const elements = await this.api.getElements();
-            await Promise.all(elements.bs01.map((bs) => updateElements(this, bs.subelements)));
-        } catch (err: any) {
-            this.handleRefreshError("refreshEvents", err);
-        }
-
-        // schedule next retrieval
-        this.setupElementsRefresh();
+        this.log.debug("Updating elements");
+        const elements = await this.api.getElements();
+        await Promise.all(elements.bs01.map((bs) => updateElements(this, bs.subelements)));
     };
-
-    /** set up periodic events retrieval timer */
-    private setupEventsRefresh(): void {
-        if (this.config.eventInterval <= 0 || this.terminating) return;
-
-        this.eventsTimeout = setTimeout(this.refreshEvents, this.config.eventInterval * 1000);
-    }
 
     /** retrieve and process events */
     private refreshEvents = async (): Promise<void> => {
-        this.log.debug("Processing events");
-        try {
-            const start = Date.now();
-            const { events } = await this.api.getRecentEvents(this.lastEvent);
-            await processEvents(this, events);
-            this.lastEvent = start;
-        } catch (err: any) {
-            this.handleRefreshError("refreshEvents", err);
-        }
-
-        // schedule next retrieval
-        this.setupEventsRefresh();
+        this.log.debug("Updating events");
+        const start = Date.now();
+        const { events } = await this.api.getRecentEvents(this.lastEvent);
+        await processEvents(this, events);
+        this.lastEvent = start;
     };
 
     /** error handling for errors during periodic refresh timers */
@@ -199,12 +183,10 @@ class GigasetElements extends utils.Adapter {
 
             if (err.statusCode === 401)
                 // reconnect if we get an authorization error
-                // use setImmediate here since the refreshXXX methods schedule the next timer after this method exits
-                setImmediate(() => {
-                    this.log.info("Encountered 401 Unauthorized error, stopping timers and reconnecting again");
-                    this.stopTimers();
-                    this.setupConnection();
-                });
+                this.log.info("Encountered 401 Unauthorized error, stopping timers and reconnecting again");
+            this.stopTimers();
+            this.setupConnection();
+            return;
         } else {
             message = "Unknown error";
         }
@@ -215,26 +197,48 @@ class GigasetElements extends utils.Adapter {
         try {
             hasApiConnectionError = await this.api.isMaintenance();
             if (hasApiConnectionError) {
-                this.log.info("API is under maintenance");
+                this.log.info("Gigaset Elements cloud is under maintenance");
             }
         } catch {
             hasApiConnectionError = true;
         }
         if (hasApiConnectionError) {
             this.log.info("Stopping timers and retrying connection in 5 minutes");
-            // use setImmediate here since the refreshXXX methods schedule the next timer after this method exits
-            setImmediate(() => {
-                this.stopTimers();
-                setTimeout(this.setupConnection, 5 * 60 * 1000);
-            });
+            this.stopTimers();
+            setTimeout(this.setupConnection, 5 * 60 * 1000);
         }
     }
 
-    /** stops timers */
+    /** helper method for scheduling periodic timer jobs */
+    private runAndSchedule = async (
+        key: keyof ITimeouts,
+        timeout: number,
+        handler: () => Promise<any>,
+        scheduleOnly?: boolean,
+    ): Promise<void> => {
+        if (timeout <= 0) return;
 
+        if (!scheduleOnly)
+            try {
+                await handler();
+            } catch (err: unknown) {
+                await this.handleRefreshError(key, err as Error);
+            }
+
+        if (!this.stopScheduling && !this.terminating) {
+            clearTimeout(this.timeouts[key]);
+            const timer = setTimeout(this.runAndSchedule, timeout * 1000, key, timeout, handler, false);
+            this.timeouts[key] = timer as unknown as NodeJS.Timeout;
+        }
+    };
+
+    /** stops timers */
     private stopTimers(): void {
-        clearTimeout(this.eventsTimeout);
-        clearTimeout(this.elementsTimeout);
+        this.stopScheduling = true;
+        const keys = Object.keys(this.timeouts) as (keyof ITimeoutsKeys)[];
+        keys.forEach((key) => {
+            clearTimeout(this.timeouts[key]);
+        });
     }
 
     /**
