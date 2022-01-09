@@ -72,6 +72,13 @@ export async function createOrUpdateElement(adapter: ioBroker.Adapter, element: 
         ),
     ];
 
+    if (element.room?.friendlyName)
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "roomName"),
+                getReadonlyStateObject({ name: "room friendly name", type: "string", role: "text" }),
+            ),
+        );
     if (element.batteryStatus)
         statePromises.push(
             adapter.extendObjectAsync(
@@ -141,6 +148,8 @@ export async function updateElement(adapter: ioBroker.Adapter, element: ISubelem
     ];
 
     // individual states
+    if (element.room?.friendlyName)
+        updates.push(adapter.setStateChangedAsync(getStateId(element, "roomName"), element.room.friendlyName, true));
     if (element.batteryStatus)
         updates.push(adapter.setStateChangedAsync(getStateId(element, "battery"), element.batteryStatus, true));
     if (element.positionStatus)

@@ -1,4 +1,5 @@
 import type { IBaseStationRootItem } from "gigaset-elements-api";
+import { convertIntrusionModesToStatesValue } from "./convert";
 import { getReadonlyStateObject } from "./util";
 
 /**
@@ -61,6 +62,7 @@ export async function createBasestationObjects(adapter: ioBroker.Adapter, bs: IB
                 name: "configured intrusion mode",
                 type: "string",
                 role: "text",
+                states: convertIntrusionModesToStatesValue(bs.intrusion_settings.modes),
             }),
         ),
         adapter.extendObjectAsync(

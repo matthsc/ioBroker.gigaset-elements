@@ -1,5 +1,7 @@
+import { IModesItem } from "gigaset-elements-api";
+
 /**
- * Converts GE state strings to numeric IOBroker id
+ * Converts GE state strings to numeric ioBroker id
  * @param state state string to convert
  */
 export function convertSensorStateToId(state: string): number {
@@ -16,4 +18,13 @@ export function convertSensorStateToId(state: string): number {
         default:
             throw new Error("Unknown state: " + state);
     }
+}
+
+/**
+ * Converts base station intrusion modes to ioBroker "enum"
+ */
+export function convertIntrusionModesToStatesValue(modesArray: IModesItem[]): string {
+    const modesStrings = modesArray.map((mode) => Object.keys(mode)[0]);
+    const modesObject = modesStrings.reduce((prev, curr) => ({ ...prev, [curr]: curr }), {});
+    return JSON.stringify(modesObject);
 }
