@@ -30,7 +30,7 @@ export async function processEvent(adapter: ioBroker.Adapter, event: IEventsItem
             await adapter.setStateAsync(event.source_id + ".online", false, true);
             break;
         case "intrusion_mode_loaded":
-            await adapter.setStateAsync(event.source_id + ".intrusionMode", (event.o as any).modeAfter, true);
+            await adapter.setStateAsync(event.source_id + ".intrusionMode", event.o?.modeAfter as string, true);
             break;
         case "intrusion":
             await adapter.setStateAsync(event.source_id + ".intrusion", true, true);

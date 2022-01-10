@@ -13,13 +13,11 @@ export function getSubelementType(element: ISubelementsItem): string {
 }
 
 export function getStateId(element: ISubelementsItem | IEventsItem, state: string): string {
-    let type: string;
-    let id: string;
-    let baseId: string;
     if (isEventsItem(element)) {
-        type = element.o.type;
-        id = element.o.id;
-        baseId = element.source_id;
+        if (!element.o?.type || !element.o?.id) return "";
+        const type = element.o.type;
+        const id = element.o.id;
+        const baseId = element.source_id;
         return `${baseId}.${type}-${id}.${state}`;
     }
     if (isSubelementsItem(element)) {
