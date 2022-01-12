@@ -21,7 +21,8 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.5.1"
+    "@iobroker/adapter-core": "^2.5.1",
+    "gigaset-elements-api": "^0.1.0"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.4.2",
