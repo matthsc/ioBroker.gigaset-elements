@@ -12,12 +12,13 @@ import { createOrUpdateBasestations, createOrUpdateElements, processEvents, upda
 interface ITimeoutsKeys {
     events: NodeJS.Timeout;
     elements: NodeJS.Timeout;
+    setupConnection: NodeJS.Timeout;
 }
 type ITimeouts = {
     [key in keyof ITimeoutsKeys]: NodeJS.Timeout;
 } & ITimeoutsKeys;
 
-class GigasetElements extends utils.Adapter {
+export class GigasetElements extends utils.Adapter {
     /** api instance */
     private api!: GigasetElementsApi;
     /** time of last events retrieval */
@@ -84,49 +85,55 @@ class GigasetElements extends utils.Adapter {
     };
 
     /** helper method for determining human-friendly error messages */
-    private getErrorMessage(err: unknown): string {
+    private logErrorMessage(err: unknown, prefix?: string): void {
+        let message: string;
         if (err instanceof NetworkError) {
-            return `Error connecting to Gigaset Elements cloud: ${err.message}`;
+            message = `Error connecting to Gigaset Elements cloud: ${err.message}`;
         } else if (err instanceof EndpointError) {
-            return `Error from Gigaset Elements cloud: ${err.statusCode}, ${err.method} ${err.uri} ${err.message}`;
+            message = `Error from Gigaset Elements cloud: ${err.statusCode}, ${err.method} ${err.uri} ${err.message}`;
         } else if ((err as Error).message) {
-            return (err as Error).message;
+            message = (err as Error).message;
         } else if (typeof err === "string") {
-            return err;
+            message = err;
+        } else {
+            message = JSON.stringify(err);
         }
 
-        return err as string;
+        if (prefix) message = `${prefix}: ${message}`;
+        this.log.error(message);
     }
 
     /**
-     * @returns true if GE cloud is under maintenance
+     * @returns false if GE cloud is under maintenance, or maintenance check failed
      */
     private async checkAndUpdateMaintenanceMode(): Promise<boolean> {
-        const isMaintenance = await this.api.isMaintenance();
-        if (isMaintenance) {
-            this.log.info("Gigaset Elements cloud is under maintenance");
+        try {
+            const isMaintenance = await this.api.isMaintenance();
+            if (isMaintenance) {
+                this.log.info("Gigaset Elements cloud is under maintenance");
+            }
+            await this.setStateChangedAsync("info.maintenance", isMaintenance, true);
+            return !isMaintenance;
+        } catch (err: unknown) {
+            this.logErrorMessage(err, "Unable to determine Gigaset Elements cloud maintenance status");
+            const minutes = 1;
+            this.log.info(`Stopping all timers and trying to reconnect in ${minutes} minutes`);
+            this.stopTimers();
+            const timer = setTimeout(this.setupConnection, minutes * 60 * 1000);
+            this.timeouts.setupConnection = timer;
+            return false;
         }
-        await this.setStateChangedAsync("info.maintenance", isMaintenance, true);
-        return isMaintenance;
     }
 
     /** setup connection to GE api */
     private setupConnection = async (): Promise<void> => {
+        if (this.terminating) return;
+
+        this.stopTimers(); // stop timers, in case something is still scheduled while reconnecting
         this.log.debug("Connecting to Gigaset Elements cloud...");
 
         // check for maintenance
-        let maintenanceOrConnectionError = false;
-        try {
-            maintenanceOrConnectionError = await this.checkAndUpdateMaintenanceMode();
-        } catch (err: unknown) {
-            maintenanceOrConnectionError = true;
-            this.log.error(this.getErrorMessage(err));
-        }
-        if (maintenanceOrConnectionError) {
-            this.log.info("Retrying connection setup in 5 minutes");
-            setTimeout(this.setupConnection, 5 * 60 * 1000);
-            return;
-        }
+        if (!(await this.checkAndUpdateMaintenanceMode())) return;
 
         // authorize
         try {
@@ -134,9 +141,8 @@ class GigasetElements extends utils.Adapter {
             await this.api.authorize();
             await this.setStateAsync("info.connection", true, true);
         } catch (err) {
-            const message = "Error authorizing with Gigaset Elements cloud: " + this.getErrorMessage(err);
-            this.log.error(message);
-            this.terminate(message);
+            this.logErrorMessage(err, "Error authorizing with Gigaset Elements cloud");
+            this.terminate();
             return;
         }
 
@@ -156,15 +162,14 @@ class GigasetElements extends utils.Adapter {
 
             // set up timers for periodic events and elements retrieval
             this.log.debug("Starting timers for periodic events/elements retrieval...");
-            this.stopTimers(); // stop timers, in case something is still scheduled while reconnecting
-            this.stopScheduling = false; // enebale scheduling of timers after stopTimers()
+            this.stopScheduling = false; // enebale scheduling of timers
             this.runAndSchedule("elements", this.config.elementInterval * 60, this.refreshElements, true);
             this.runAndSchedule("events", this.config.eventInterval, this.refreshEvents);
 
             this.log.info("Successfully connected to Gigaset Elements cloud and initialized states");
-        } catch (err) {
-            this.log.error(`Error during connection setup: ${this.getErrorMessage(err)}`);
-            this.log.info("Restarting...");
+        } catch (err: unknown) {
+            this.logErrorMessage(err, "Error during connection setup");
+            this.log.info("Restarting due to previous error...");
             this.restart();
         }
     };
@@ -193,30 +198,20 @@ class GigasetElements extends utils.Adapter {
         } else if (err instanceof EndpointError) {
             message = `Endpoint error ${err.statusCode}, ${err.method} ${err.uri}`;
 
-            if (err.statusCode === 401)
+            if (err.statusCode === 401) {
                 // reconnect if we get an authorization error
                 this.log.info("Encountered 401 Unauthorized error, stopping timers and reconnecting again");
-            this.stopTimers();
-            this.setupConnection();
-            return;
+                this.stopTimers();
+                this.setupConnection(); // runs async
+                return;
+            }
         } else {
             message = "Unknown error";
         }
         this.log.error(`${source} - ${message}: ${err.message} ${err.stack}`);
 
         // check for maintenance mode
-        let maintenanceOrConnectionError = false;
-        try {
-            maintenanceOrConnectionError = await this.checkAndUpdateMaintenanceMode();
-        } catch (err: unknown) {
-            maintenanceOrConnectionError = true;
-            this.log.error(this.getErrorMessage(err));
-        }
-        if (maintenanceOrConnectionError) {
-            this.log.info("Stopping timers and retrying connection in 5 minutes");
-            this.stopTimers();
-            setTimeout(this.setupConnection, 5 * 60 * 1000);
-        }
+        await this.checkAndUpdateMaintenanceMode();
     }
 
     /** helper method for scheduling periodic timer jobs */
