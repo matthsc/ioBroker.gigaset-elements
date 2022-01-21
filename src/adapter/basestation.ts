@@ -1,5 +1,4 @@
 import type { IBaseStationRootItem } from "gigaset-elements-api";
-import { convertIntrusionModesToStatesValue } from "./convert";
 import { getReadonlyStateObject } from "./util";
 
 /**
@@ -56,23 +55,6 @@ export async function createBasestationObjects(adapter: ioBroker.Adapter, bs: IB
                 role: "indicator.reachable",
             }),
         ),
-        adapter.extendObjectAsync(
-            `${bs.id}.intrusionMode`,
-            getReadonlyStateObject({
-                name: "configured intrusion mode",
-                type: "string",
-                role: "text",
-                states: convertIntrusionModesToStatesValue(bs.intrusion_settings.modes),
-            }),
-        ),
-        adapter.extendObjectAsync(
-            `${bs.id}.intrusion`,
-            getReadonlyStateObject({
-                name: "whether there is an active intrusion alert",
-                type: "boolean",
-                role: "indicator.alarm",
-            }),
-        ),
     ]);
 }
 
@@ -85,6 +67,6 @@ export async function updateBasestation(adapter: ioBroker.Adapter, bs: IBaseStat
     await Promise.all([
         adapter.setStateChangedAsync(`${bs.id}.name`, bs.friendly_name, true),
         adapter.setStateChangedAsync(`${bs.id}.online`, bs.status === "online", true),
-        adapter.setStateChangedAsync(`${bs.id}.intrusionMode`, bs.intrusion_settings.active_mode, true),
+        adapter.setStateChangedAsync(`info.intrusionMode`, bs.intrusion_settings.active_mode, true),
     ]);
 }

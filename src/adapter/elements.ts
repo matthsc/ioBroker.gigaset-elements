@@ -72,6 +72,29 @@ export async function createOrUpdateElement(adapter: ioBroker.Adapter, element: 
         ),
     ];
 
+    if (
+        [
+            "is01", //siren
+            "um01", //universal
+            "ds02", //door
+            "ws02", //window
+            "wd01", //water
+        ]
+            .map((type) => `bs01.${type}`)
+            .includes(element.type)
+    )
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "alarm"),
+                getReadonlyStateObject({
+                    name: "whether the element has an alarm",
+                    type: "boolean",
+                    role: "sensor.alarm",
+                    def: false,
+                }),
+            ),
+        );
+
     if (element.room?.friendlyName)
         statePromises.push(
             adapter.extendObjectAsync(
