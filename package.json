@@ -90,7 +90,7 @@
     "test:ts": "mocha --config test/mocharc.custom.json src/**/*.test.ts",
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit",
+    "test:integration": "mocha --require ts-node/register test/integration.ts --exit",
     "test": "npm run test:ts && npm run test:package",
     "check": "tsc --noEmit",
     "coverage": "nyc npm run test:ts",
