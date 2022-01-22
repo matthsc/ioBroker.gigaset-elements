@@ -8,7 +8,11 @@ import { getStateId } from "./util";
  * @param events events data to process
  */
 export async function processEvents(adapter: ioBroker.Adapter, events: IEventsItem[]): Promise<void> {
-    await Promise.all(events.map((event) => processEvent(adapter, event)));
+    // ensure events are sorted in ascending order
+    const sortedEvents = [...events];
+    sortedEvents.sort((a, b) => a.ts.localeCompare(b.ts));
+    // process events
+    await Promise.all(sortedEvents.map((event) => processEvent(adapter, event)));
 }
 
 /**
