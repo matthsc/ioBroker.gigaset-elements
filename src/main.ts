@@ -8,6 +8,7 @@ import * as utils from "@iobroker/adapter-core";
 // Load your modules here
 import { EndpointError, GigasetElementsApi, NetworkError } from "gigaset-elements-api";
 import { createOrUpdateBasestations, createOrUpdateElements, processEvents, updateElements } from "./adapter";
+import { handleMessage, respondWithError } from "./adapter/messageHandler";
 
 interface ITimeoutsKeys {
     events: NodeJS.Timeout;
@@ -38,7 +39,7 @@ export class GigasetElements extends utils.Adapter {
         this.on("ready", this.onReady.bind(this));
         // this.on("stateChange", this.onStateChange.bind(this));
         // this.on("objectChange", this.onObjectChange.bind(this));
-        // this.on("message", this.onMessage.bind(this));
+        this.on("message", this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
     }
 
@@ -289,22 +290,23 @@ export class GigasetElements extends utils.Adapter {
     //     }
     // }
 
-    // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-    // /**
-    //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-    //  * Using this method requires "common.messagebox" property to be set to true in io-package.json
-    //  */
-    // private onMessage(obj: ioBroker.Message): void {
-    //     if (typeof obj === "object" && obj.message) {
-    //         if (obj.command === "send") {
-    //             // e.g. send email or pushover or whatever
-    //             this.log.info("send command");
+    /**
+     * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+     * Using this method requires "common.messagebox" property to be set to true in io-package.json
+     */
+    private async onMessage(obj: ioBroker.Message): Promise<void> {
+        this.log.debug("message recieved: " + JSON.stringify(obj));
 
-    //             // Send response in callback if required
-    //             if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-    //         }
-    //     }
-    // }
+        if (typeof obj === "object") {
+            try {
+                await handleMessage(this, obj);
+            } catch (e: any) {
+                const message = "Error processing message: " + (e instanceof Error ? e.message : (e as string));
+                this.log.error(message);
+                respondWithError(this, obj, message);
+            }
+        }
+    }
 }
 
 if (require.main !== module) {
