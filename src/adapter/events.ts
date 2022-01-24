@@ -10,6 +10,7 @@ import { getStateId } from "./util";
 export async function processEvents(adapter: ioBroker.Adapter, events: IEventsItem[]): Promise<void> {
     // quick exit
     if (!events.length) return;
+    if (events.length === 1) return processEvent(adapter, events[0]);
 
     // ensure events are sorted in ascending order
     const sortedEvents = [...events];
