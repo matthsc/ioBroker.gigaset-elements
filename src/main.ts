@@ -21,7 +21,7 @@ type ITimeouts = {
 
 export class GigasetElements extends utils.Adapter {
     /** api instance */
-    private api!: GigasetElementsApi;
+    public api!: GigasetElementsApi;
     /** time of last events retrieval */
     private lastEvent!: number;
     /** timeouts */

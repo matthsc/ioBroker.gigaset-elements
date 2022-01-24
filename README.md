@@ -49,7 +49,61 @@ So far, the adapter has been tested/is known to work with the following Elements
 
 ## Messages
 
-The adapter does not support any messages yet.
+So far, the adapter only supports messages used for testing/debugging.
+
+### Testing
+
+Callback responses are either <code>{ response: "&lt;message&gt;" }</code> if the action was sucessfull, or <code>{ error: "&lt;error message&gt;" }</code> in case something went wrong.
+
+#### Ping
+
+Send a ping to the adapter, and receive a <code>{ response: "pong" }</code>.
+
+```ts
+sendTo("innoxel.0", "test", "ping", callback);
+```
+
+#### Process test data
+
+Process test data from [gigaset-elements-api](https://github.com/matthsc/gigaset-elements-api). Creates base stations, elements, and processes captured test events.
+
+```ts
+sendTo("innoxel.0", "test", "process-test-data", callback);
+```
+
+### Debugging
+
+Callback responses are either <code>{ response: object }</code> if the action was sucessfull, or <code>{ error: "&lt;error message&gt;" }</code> in case something went wrong.
+
+#### Prepare test data
+
+Load current data from the Gigaset Elements API and prepare it to be integrated as test data into [gigaset-elements-api](https://github.com/matthsc/gigaset-elements-api), i.e. for new events or elements that have no test data yet.
+
+Loads basestations, elements and events from the API, reduces it to minimize the amount of data, and tries to strip personal information like names and ids from the data.
+
+Returns the data as an <code>{ response: { bs: [], elements: [], events: [] } }</code> object.
+
+```ts
+sendTo("innoxel.0", "debug", { action: "prepare-test-data" from?: Date }, callback);
+```
+
+#### Load base station and element data
+
+Loads and returns the raw basestation and elements data as an <code>{ response: { bs: [], elements: []} }</code> object.
+
+```ts
+sendTo("innoxel.0", "test", { action: "load-bases-elements" }, callback);
+```
+
+#### Load events
+
+Loads events and returns an <code>{ response: { events: [] } }</code> object.
+
+Event data is usually available for 1 month, older data seems not to be available.
+
+```ts
+sendTo("innoxel.0", "test", { action: "load-events", from: Date, to: Date }, callback);
+```
 
 ## Changelog
 
