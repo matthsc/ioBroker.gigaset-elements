@@ -11,7 +11,6 @@ Adapter for Gigaset Elements (https://gigaset.com/smart-home)
 
 ![Number of Installations](https://iobroker.live/badges/gigaset-elements-installed.svg)
 ![Current version in stable repository](https://iobroker.live/badges/gigaset-elements-stable.svg)
-[![Dependency Status](https://img.shields.io/david/matthsc/iobroker.gigaset-elements.svg)](https://david-dm.org/matthsc/iobroker.gigaset-elements)
 
 ![Test and Release](https://github.com/matthsc/ioBroker.gigaset-elements/workflows/Test%20and%20Release/badge.svg)
 
@@ -46,6 +45,8 @@ So far, the adapter has been tested/is known to work with the following Elements
 | is01         | Siren                 | matthsc   |
 | um01         | Universal/Window/Door | matthsc   |
 | wd01         | Water                 | matthsc   |
+
+If you have other elements, or encounter event types that are not yet handled by the adapter, you can enable expert mode in ioBroker, go to the _Debug_ tab in the adapter settings, and prepare test data to submit as a github issue for this adapter to get the additional elements/event types included.
 
 ## Messages
 

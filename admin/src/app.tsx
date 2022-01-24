@@ -5,6 +5,10 @@ import GenericApp from "@iobroker/adapter-react/GenericApp";
 import Settings from "./components/settings";
 import { GenericAppProps, GenericAppSettings } from "@iobroker/adapter-react/types";
 import { StyleRules } from "@material-ui/core/styles";
+import { AppBar, Box, Tab, Tabs } from "@material-ui/core";
+import { Debug } from "./components/debug";
+import { Settings as SettingsIcon, DeveloperMode } from "@material-ui/icons";
+import I18n from "@iobroker/adapter-react/i18n";
 
 const styles = (_theme: Theme): StyleRules => ({
     root: {},
@@ -42,7 +46,15 @@ class App extends GenericApp {
 
         return (
             <div className="App">
-                <Settings native={this.state.native} onChange={(attr, value) => this.updateNativeValue(attr, value)} />
+                <AppContainer
+                    expertMode={this.getExpertMode()}
+                    native={this.state.native}
+                    updateNativeValue={this.updateNativeValue.bind(this)}
+                    sendMessage={(command, message) => {
+                        const to = `${this.adapterName}.${this.instance}`;
+                        return this.socket.sendTo(to, command, message);
+                    }}
+                />
                 {this.renderError()}
                 {this.renderToast()}
                 {this.renderSaveCloseButtons()}
@@ -52,3 +64,45 @@ class App extends GenericApp {
 }
 
 export default withStyles(styles)(App);
+
+function AppContainer({
+    expertMode,
+    native,
+    updateNativeValue,
+    sendMessage,
+}: {
+    expertMode: boolean;
+    native: ioBroker.AdapterConfig;
+    updateNativeValue: (attr: string, value: unknown) => void;
+    sendMessage: (command: string, message?: ioBroker.MessagePayload) => Promise<ioBroker.Message | undefined>;
+}) {
+    const [selectedTab, setSelectedTab] = React.useState<number>(() => {
+        return 0;
+    });
+
+    let tab = 0;
+    return (
+        <Box mt={1}>
+            <AppBar position="static">
+                <Tabs
+                    value={selectedTab}
+                    onChange={(e, newTab: number) => {
+                        setSelectedTab(newTab);
+                    }}
+                >
+                    <Tab icon={<SettingsIcon />} label={I18n.t("tab_settings")} />
+                    {expertMode && <Tab icon={<DeveloperMode />} label={I18n.t("tab_debug")} />}
+                </Tabs>
+            </AppBar>
+            {selectedTab === tab++ && (
+                <Settings
+                    native={native}
+                    onChange={(attr, value) => {
+                        updateNativeValue(attr, value);
+                    }}
+                />
+            )}
+            {selectedTab === tab++ && <Debug sendMessage={sendMessage} />}
+        </Box>
+    );
+}

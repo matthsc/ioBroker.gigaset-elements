@@ -134,7 +134,12 @@
                 "role": "text",
                 "name": "configured intrusion mode",
                 "type": "string",
-                "states": { "custom": "Custom", "night": "Night", "home": "Home", "away": "Away" },
+                "states": {
+                    "custom": "Custom",
+                    "night": "Night",
+                    "home": "Home",
+                    "away": "Away"
+                },
                 "read": true,
                 "write": true
             },
