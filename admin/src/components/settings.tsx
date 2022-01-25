@@ -55,10 +55,8 @@ interface SettingsProps {
     onChange: (attr: string, value: any) => void;
 }
 
-interface SettingsState {
-    // add your state properties here
-    dummy?: undefined;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface SettingsState {}
 
 class Settings extends React.Component<SettingsProps, SettingsState> {
     constructor(props: SettingsProps) {
