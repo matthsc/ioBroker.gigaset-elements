@@ -12,7 +12,7 @@ loadEvents(true).then((eventRoot) => {
             const setStateAsyncMock = Sinon.fake();
             setStateAsyncMock.returnValues = [Promise.resolve()];
             adapterMock = {
-                setStateChangedAsync: Sinon.fake(),
+                setStateChangedAsync: setStateAsyncMock,
                 log: {
                     info: Sinon.fake(),
                 } as Partial<ioBroker.Logger> as ioBroker.Logger,
