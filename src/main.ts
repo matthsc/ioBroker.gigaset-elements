@@ -7,8 +7,14 @@
 import * as utils from "@iobroker/adapter-core";
 // Load your modules here
 import { EndpointError, GigasetElementsApi, NetworkError } from "gigaset-elements-api";
-import { createOrUpdateBasestations, createOrUpdateElements, processEvents, updateElements } from "./adapter";
-import { handleMessage, respondWithError } from "./adapter/messageHandler";
+import {
+    createOrUpdateBasestations,
+    createOrUpdateElements,
+    handleMessage,
+    processEvents,
+    respondWithError,
+    updateElements,
+} from "./adapter";
 
 interface ITimeoutsKeys {
     events: NodeJS.Timeout;
