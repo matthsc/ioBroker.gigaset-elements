@@ -1,6 +1,6 @@
 {
   "name": "iobroker.gigaset-elements",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Adapter for Gigaset Elements",
   "author": {
     "name": "matthsc",

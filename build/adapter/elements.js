@@ -55,6 +55,21 @@ async function createOrUpdateElement(adapter, element) {
             role: "indicator",
         })),
     ];
+    if ([
+        "is01",
+        "um01",
+        "ds02",
+        "ws02",
+        "wd01", //water
+    ]
+        .map((type) => `bs01.${type}`)
+        .includes(element.type))
+        statePromises.push(adapter.extendObjectAsync((0, util_1.getStateId)(element, "alarm"), (0, util_1.getReadonlyStateObject)({
+            name: "whether the element has an alarm",
+            type: "boolean",
+            role: "sensor.alarm",
+            def: false,
+        })));
     if ((_a = element.room) === null || _a === void 0 ? void 0 : _a.friendlyName)
         statePromises.push(adapter.extendObjectAsync((0, util_1.getStateId)(element, "roomName"), (0, util_1.getReadonlyStateObject)({ name: "room friendly name", type: "string", role: "text" })));
     if (element.batteryStatus)

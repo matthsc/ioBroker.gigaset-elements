@@ -3,6 +3,7 @@
  * Created with @iobroker/create-adapter v2.0.1
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.GigasetElements = void 0;
 const tslib_1 = require("tslib");
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
@@ -56,21 +57,13 @@ class GigasetElements extends utils.Adapter {
         };
         /** setup connection to GE api */
         this.setupConnection = async () => {
+            if (this.terminating)
+                return;
+            this.stopTimers(); // stop timers, in case something is still scheduled while reconnecting
             this.log.debug("Connecting to Gigaset Elements cloud...");
             // check for maintenance
-            let maintenanceOrConnectionError = false;
-            try {
-                maintenanceOrConnectionError = await this.checkAndUpdateMaintenanceMode();
-            }
-            catch (err) {
-                maintenanceOrConnectionError = true;
-                this.log.error(this.getErrorMessage(err));
-            }
-            if (maintenanceOrConnectionError) {
-                this.log.info("Retrying connection setup in 5 minutes");
-                setTimeout(this.setupConnection, 5 * 60 * 1000);
+            if (!(await this.checkAndUpdateMaintenanceMode()))
                 return;
-            }
             // authorize
             try {
                 this.log.debug("Authorizing...");
@@ -78,9 +71,8 @@ class GigasetElements extends utils.Adapter {
                 await this.setStateAsync("info.connection", true, true);
             }
             catch (err) {
-                const message = "Error authorizing with Gigaset Elements cloud: " + this.getErrorMessage(err);
-                this.log.error(message);
-                this.terminate(message);
+                this.logErrorMessage(err, "Error authorizing with Gigaset Elements cloud");
+                this.terminate();
                 return;
             }
             // initialize last event date
@@ -96,15 +88,14 @@ class GigasetElements extends utils.Adapter {
                 await (0, adapter_1.createOrUpdateElements)(this, bs01);
                 // set up timers for periodic events and elements retrieval
                 this.log.debug("Starting timers for periodic events/elements retrieval...");
-                this.stopTimers(); // stop timers, in case something is still scheduled while reconnecting
-                this.stopScheduling = false; // enebale scheduling of timers after stopTimers()
+                this.stopScheduling = false; // enebale scheduling of timers
                 this.runAndSchedule("elements", this.config.elementInterval * 60, this.refreshElements, true);
                 this.runAndSchedule("events", this.config.eventInterval, this.refreshEvents);
                 this.log.info("Successfully connected to Gigaset Elements cloud and initialized states");
             }
             catch (err) {
-                this.log.error(`Error during connection setup: ${this.getErrorMessage(err)}`);
-                this.log.info("Restarting...");
+                this.logErrorMessage(err, "Error during connection setup");
+                this.log.info("Restarting due to previous error...");
                 this.restart();
             }
         };
@@ -142,35 +133,52 @@ class GigasetElements extends utils.Adapter {
         this.on("ready", this.onReady.bind(this));
         // this.on("stateChange", this.onStateChange.bind(this));
         // this.on("objectChange", this.onObjectChange.bind(this));
-        // this.on("message", this.onMessage.bind(this));
+        this.on("message", this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
     }
     /** helper method for determining human-friendly error messages */
-    getErrorMessage(err) {
+    logErrorMessage(err, prefix) {
+        let message;
         if (err instanceof gigaset_elements_api_1.NetworkError) {
-            return `Error connecting to Gigaset Elements cloud: ${err.message}`;
+            message = `Error connecting to Gigaset Elements cloud: ${err.message}`;
         }
         else if (err instanceof gigaset_elements_api_1.EndpointError) {
-            return `Error from Gigaset Elements cloud: ${err.statusCode}, ${err.method} ${err.uri} ${err.message}`;
+            message = `Error from Gigaset Elements cloud: ${err.statusCode}, ${err.method} ${err.uri} ${err.message}`;
         }
         else if (err.message) {
-            return err.message;
+            message = err.message;
         }
         else if (typeof err === "string") {
-            return err;
+            message = err;
         }
-        return err;
+        else {
+            message = JSON.stringify(err);
+        }
+        if (prefix)
+            message = `${prefix}: ${message}`;
+        this.log.error(message);
     }
     /**
-     * @returns true if GE cloud is under maintenance
+     * @returns false if GE cloud is under maintenance, or maintenance check failed
      */
     async checkAndUpdateMaintenanceMode() {
-        const isMaintenance = await this.api.isMaintenance();
-        if (isMaintenance) {
-            this.log.info("Gigaset Elements cloud is under maintenance");
+        try {
+            const isMaintenance = await this.api.isMaintenance();
+            if (isMaintenance) {
+                this.log.info("Gigaset Elements cloud is under maintenance");
+            }
+            await this.setStateChangedAsync("info.maintenance", isMaintenance, true);
+            return !isMaintenance;
         }
-        await this.setStateChangedAsync("info.maintenance", isMaintenance, true);
-        return isMaintenance;
+        catch (err) {
+            this.logErrorMessage(err, "Unable to determine Gigaset Elements cloud maintenance status");
+            const minutes = 1;
+            this.log.info(`Stopping all timers and trying to reconnect in ${minutes} minutes`);
+            this.stopTimers();
+            const timer = setTimeout(this.setupConnection, minutes * 60 * 1000);
+            this.timeouts.setupConnection = timer;
+            return false;
+        }
     }
     /** error handling for errors during periodic refresh timers */
     async handleRefreshError(source, err) {
@@ -180,31 +188,20 @@ class GigasetElements extends utils.Adapter {
         }
         else if (err instanceof gigaset_elements_api_1.EndpointError) {
             message = `Endpoint error ${err.statusCode}, ${err.method} ${err.uri}`;
-            if (err.statusCode === 401)
+            if (err.statusCode === 401) {
                 // reconnect if we get an authorization error
                 this.log.info("Encountered 401 Unauthorized error, stopping timers and reconnecting again");
-            this.stopTimers();
-            this.setupConnection();
-            return;
+                this.stopTimers();
+                this.setupConnection(); // runs async
+                return;
+            }
         }
         else {
             message = "Unknown error";
         }
         this.log.error(`${source} - ${message}: ${err.message} ${err.stack}`);
         // check for maintenance mode
-        let maintenanceOrConnectionError = false;
-        try {
-            maintenanceOrConnectionError = await this.checkAndUpdateMaintenanceMode();
-        }
-        catch (err) {
-            maintenanceOrConnectionError = true;
-            this.log.error(this.getErrorMessage(err));
-        }
-        if (maintenanceOrConnectionError) {
-            this.log.info("Stopping timers and retrying connection in 5 minutes");
-            this.stopTimers();
-            setTimeout(this.setupConnection, 5 * 60 * 1000);
-        }
+        await this.checkAndUpdateMaintenanceMode();
     }
     /** stops timers */
     stopTimers() {
@@ -229,7 +226,51 @@ class GigasetElements extends utils.Adapter {
             callback();
         }
     }
+    // If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
+    // You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
+    // /**
+    //  * Is called if a subscribed object changes
+    //  */
+    // private onObjectChange(id: string, obj: ioBroker.Object | null | undefined): void {
+    //     if (obj) {
+    //         // The object was changed
+    //         this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
+    //     } else {
+    //         // The object was deleted
+    //         this.log.info(`object ${id} deleted`);
+    //     }
+    // }
+    // /**
+    //  * Is called if a subscribed state changes
+    //  */
+    // private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
+    //     if (state) {
+    //         // The state was changed
+    //         this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+    //     } else {
+    //         // The state was deleted
+    //         this.log.info(`state ${id} deleted`);
+    //     }
+    // }
+    /**
+     * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+     * Using this method requires "common.messagebox" property to be set to true in io-package.json
+     */
+    async onMessage(obj) {
+        this.log.debug("message recieved: " + JSON.stringify(obj));
+        if (typeof obj === "object") {
+            try {
+                await (0, adapter_1.handleMessage)(this, obj);
+            }
+            catch (e) {
+                const message = "Error processing message: " + (e instanceof Error ? e.message : e);
+                this.log.error(message);
+                (0, adapter_1.respondWithError)(this, obj, message);
+            }
+        }
+    }
 }
+exports.GigasetElements = GigasetElements;
 if (require.main !== module) {
     // Export the constructor in compact mode
     module.exports = (options) => new GigasetElements(options);

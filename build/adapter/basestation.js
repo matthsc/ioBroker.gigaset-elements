@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBasestation = exports.createBasestationObjects = exports.createOrUpdateBasestation = exports.createOrUpdateBasestations = void 0;
-const convert_1 = require("./convert");
 const util_1 = require("./util");
 /**
  * creates basestation objects and states, and updates state data
@@ -48,17 +47,6 @@ async function createBasestationObjects(adapter, bs) {
             type: "boolean",
             role: "indicator.reachable",
         })),
-        adapter.extendObjectAsync(`${bs.id}.intrusionMode`, (0, util_1.getReadonlyStateObject)({
-            name: "configured intrusion mode",
-            type: "string",
-            role: "text",
-            states: (0, convert_1.convertIntrusionModesToStatesValue)(bs.intrusion_settings.modes),
-        })),
-        adapter.extendObjectAsync(`${bs.id}.intrusion`, (0, util_1.getReadonlyStateObject)({
-            name: "whether there is an active intrusion alert",
-            type: "boolean",
-            role: "indicator.alarm",
-        })),
     ]);
 }
 exports.createBasestationObjects = createBasestationObjects;
@@ -71,7 +59,7 @@ async function updateBasestation(adapter, bs) {
     await Promise.all([
         adapter.setStateChangedAsync(`${bs.id}.name`, bs.friendly_name, true),
         adapter.setStateChangedAsync(`${bs.id}.online`, bs.status === "online", true),
-        adapter.setStateChangedAsync(`${bs.id}.intrusionMode`, bs.intrusion_settings.active_mode, true),
+        adapter.setStateChangedAsync(`info.intrusionMode`, bs.intrusion_settings.active_mode, true),
     ]);
 }
 exports.updateBasestation = updateBasestation;

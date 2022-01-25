@@ -9,7 +9,20 @@ const util_1 = require("./util");
  * @param events events data to process
  */
 async function processEvents(adapter, events) {
-    await Promise.all(events.map((event) => processEvent(adapter, event)));
+    // quick exit
+    if (!events.length)
+        return;
+    if (events.length === 1)
+        return processEvent(adapter, events[0]);
+    // ensure events are sorted in ascending order
+    const sortedEvents = [...events];
+    sortedEvents.sort((a, b) => a.ts.localeCompare(b.ts));
+    sortedEvents.forEach((e) => {
+        console.log(e.ts);
+    });
+    // process events - one by one, so order is maintained
+    for (const event of sortedEvents)
+        await processEvent(adapter, event);
 }
 exports.processEvents = processEvents;
 /**
@@ -23,25 +36,53 @@ async function processEvent(adapter, event) {
         case "open":
         case "tilt":
         case "close":
-            await adapter.setStateAsync((0, util_1.getStateId)(event, "position"), (0, convert_1.convertSensorStateToId)(event.type), true);
+            await adapter.setStateChangedAsync((0, util_1.getStateId)(event, "position"), (0, convert_1.convertSensorStateToId)(event.type), true);
             break;
         case "bs_online_notification":
-            await adapter.setStateAsync(event.source_id + ".online", true, true);
-            break;
         case "bs_offline_notification":
-            await adapter.setStateAsync(event.source_id + ".online", false, true);
-            break;
-        case "intrusion_mode_loaded":
-            await adapter.setStateAsync(event.source_id + ".intrusionMode", (_a = event.o) === null || _a === void 0 ? void 0 : _a.modeAfter, true);
+            await adapter.setStateChangedAsync(event.source_id + ".online", event.type.startsWith("bs_online"), true);
             break;
         case "intrusion":
-            await adapter.setStateAsync(event.source_id + ".intrusion", true, true);
-            break;
         case "ack_intrusion":
-            await adapter.setStateAsync(event.source_id + ".intrusion", false, true);
+            await adapter.setStateChangedAsync("info.intrusion", !event.type.startsWith("ack_"), true);
             break;
-        case "isl01.configuration_changed.user.intrusion_mode":
-            // ignore
+        case "intrusion_mode_loaded":
+        case "isl01.bs01.intrusion_mode_loaded":
+        case "isl01.bs01.intrusion_mode_loaded.fail":
+        case "isl01.configuration_changed.user.intrusion_mode": {
+            await adapter.setStateChangedAsync("info.intrusionMode", (_a = event.o) === null || _a === void 0 ? void 0 : _a.modeAfter, true);
+            break;
+        }
+        case "sirenon":
+        case "sirenoff":
+            await adapter.setStateChangedAsync((0, util_1.getStateId)(event, "alarm"), event.type === "sirenon", true);
+            break;
+        case "battery_critical":
+            await adapter.setStateChangedAsync((0, util_1.getStateId)(event, "battery"), "critical", true);
+            break;
+        case "sensor_online_notification":
+        case "endnode_online_notification":
+        case "sensor_offline_notification":
+        case "endnode_offline_notification": {
+            const isOnline = event.type.includes("_online_");
+            await Promise.all([
+                adapter.setStateChangedAsync((0, util_1.getStateId)(event, "online"), isOnline, true),
+                adapter.setStateChangedAsync((0, util_1.getStateId)(event, "connectionStatus"), isOnline ? "online" : "offline", true),
+            ]);
+            break;
+        }
+        case "drilling_suspected":
+        case "drilling_alert":
+        case "water_detected":
+            await adapter.setStateChangedAsync((0, util_1.getStateId)(event, "alarm"), true, true);
+            break;
+        case "drilling_off":
+        case "water_no_longer_detected":
+            await adapter.setStateChangedAsync((0, util_1.getStateId)(event, "alarm"), false, true);
+            break;
+        case "user_alarm_start":
+        case "user_alarm_end":
+            await adapter.setStateChangedAsync("info.userAlarm", event.type.endsWith("start"), true);
             break;
         default:
             adapter.log.info("Unknown event type: " + JSON.stringify(event.type));
