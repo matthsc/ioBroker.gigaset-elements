@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import { MuiThemeProvider } from "@material-ui/core/styles";
 import theme from "@iobroker/adapter-react/Theme";
 import Utils from "@iobroker/adapter-react/Components/Utils";
 import App from "./app";
