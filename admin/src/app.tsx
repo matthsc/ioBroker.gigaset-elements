@@ -1,13 +1,18 @@
 import React from "react";
-import { Theme, withStyles } from "@material-ui/core/styles";
+import withStyles from "@material-ui/core/styles/withStyles";
+import type { Theme } from "@material-ui/core/styles";
 
 import GenericApp from "@iobroker/adapter-react/GenericApp";
 import Settings from "./components/settings";
 import { GenericAppProps, GenericAppSettings } from "@iobroker/adapter-react/types";
-import { StyleRules } from "@material-ui/core/styles";
-import { AppBar, Box, Tab, Tabs } from "@material-ui/core";
+import type { StyleRules } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Box from "@material-ui/core/Box";
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
 import { Debug } from "./components/debug";
-import { Settings as SettingsIcon, DeveloperMode } from "@material-ui/icons";
+import SettingsIcon from "@material-ui/icons/Settings";
+import DeveloperMode from "@material-ui/icons/DeveloperMode";
 import I18n from "@iobroker/adapter-react/i18n";
 
 const styles = (_theme: Theme): StyleRules => ({

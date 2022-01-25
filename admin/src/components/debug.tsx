@@ -1,19 +1,19 @@
 import React from "react";
 import I18n from "@iobroker/adapter-react/i18n";
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    Button,
-    CircularProgress,
-    Grid,
-    Modal,
-    TextareaAutosize,
-    TextField,
-} from "@material-ui/core";
-import { startOfDay, endOfDay, lightFormat } from "date-fns";
-import { ExpandMore } from "@material-ui/icons";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Grid from "@material-ui/core/Grid";
+import Modal from "@material-ui/core/Modal";
+import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+import TextField from "@material-ui/core/TextField";
+import endOfDay from "date-fns/esm/endOfDay";
+import lightFormat from "date-fns/esm/lightFormat";
+import startOfDay from "date-fns/esm/startOfDay";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 
 export interface IDebugProps {
     sendMessage: (command: string, message: ioBroker.MessagePayload) => Promise<ioBroker.Message | undefined>;
