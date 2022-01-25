@@ -12,7 +12,7 @@ import {
     TextareaAutosize,
     TextField,
 } from "@material-ui/core";
-import { startOfDay, endOfDay, addDays, lightFormat } from "date-fns";
+import { startOfDay, endOfDay, lightFormat } from "date-fns";
 import { ExpandMore } from "@material-ui/icons";
 
 export interface IDebugProps {
@@ -99,8 +99,6 @@ function EventsRow({ sendMessage }: IDebugProps) {
                     key="from"
                     type="date"
                     label={I18n.t("debug_apievents_from")}
-                    min={startOfDay(addDays(Date.now(), -31)).getDate()}
-                    max={Date.now()}
                     value={lightFormat(from, "yyyy-MM-dd")}
                     onChange={(e) => {
                         const newDate = (e.target as HTMLInputElement).valueAsDate;
@@ -111,8 +109,6 @@ function EventsRow({ sendMessage }: IDebugProps) {
                     key="to"
                     type="date"
                     label={I18n.t("debug_apievents_to")}
-                    min={startOfDay(addDays(Date.now(), -31)).getDate()}
-                    max={Date.now()}
                     value={lightFormat(from, "yyyy-MM-dd")}
                     onChange={(e) => {
                         const newDate = (e.target as HTMLInputElement).valueAsDate;
@@ -159,7 +155,8 @@ function Row({
                         {description && <Grid item>{I18n.t(description)}</Grid>}
                         <Grid item>
                             <Grid container spacing={2} alignItems="center">
-                                {buttonRowGridItems?.length > 0 &&
+                                {buttonRowGridItems &&
+                                    buttonRowGridItems.length > 0 &&
                                     buttonRowGridItems.map((item, index) => (
                                         <Grid item key={index}>
                                             {item}
