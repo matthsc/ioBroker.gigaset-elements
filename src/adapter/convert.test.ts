@@ -16,6 +16,7 @@ describe("convertSensorStateToId", () => {
     it("converts close", () => {
         assert.equal(convertSensorStateToId("close"), 0);
         assert.equal(convertSensorStateToId("closed"), 0);
+        assert.equal(convertSensorStateToId("probably_closed"), 0); // temporarily seen on elements
     });
     it("converts tilt", () => {
         assert.equal(convertSensorStateToId("tilt"), 1);

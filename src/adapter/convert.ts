@@ -8,6 +8,7 @@ export function convertSensorStateToId(state: string): number {
     switch (state) {
         case "closed":
         case "close":
+        case "probably_closed":
             return 0;
         case "tilted":
         case "tilt":
