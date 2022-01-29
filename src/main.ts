@@ -215,7 +215,7 @@ export class GigasetElements extends utils.Adapter {
         } else {
             message = "Unknown error";
         }
-        this.log.error(`${source} - ${message}: ${err.message} ${err.stack}`);
+        this.log.error(`refresh ${source} - ${message}: ${err.message}`);
 
         // check for maintenance mode
         await this.checkAndUpdateMaintenanceMode();
