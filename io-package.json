@@ -1,162 +1,184 @@
 {
-    "common": {
-        "name": "gigaset-elements",
-        "version": "0.0.3",
-        "news": {
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
-            }
-        },
-        "title": "Gigaset Elements",
-        "titleLang": {
-            "en": "Gigaset Elements",
-            "de": "Gigaset Elements",
-            "ru": "Элементы Gigaset",
-            "pt": "Elementos Gigaset",
-            "nl": "Gigaset Elements",
-            "fr": "Éléments Gigaset",
-            "it": "Elementi Gigaset",
-            "es": "Elementos de Gigaset",
-            "pl": "Elementy Gigaset",
-            "zh-cn": "千兆元素"
-        },
-        "desc": {
-            "en": "Adapter for Gigaset Elements",
-            "de": "Adapter für Gigaset Elements",
-            "ru": "Адаптер для Gigaset Elements",
-            "pt": "Adaptador para Gigaset Elements",
-            "nl": "Adapter voor Gigaset Elements",
-            "fr": "Adaptateur pour Gigaset Elements",
-            "it": "Adattatore per Gigaset Elements",
-            "es": "Adaptador para Gigaset Elements",
-            "pl": "Adapter do Gigaset Elements",
-            "zh-cn": "用于 Gigaset Elements 的适配器"
-        },
-        "authors": ["matthsc <matthsc@gmx.net>"],
-        "keywords": ["gigaset elements", "security", "alarm"],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "build/main.js",
-        "icon": "gigaset-elements.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/matthsc/ioBroker.gigaset-elements/main/admin/gigaset-elements.png",
-        "readme": "https://github.com/matthsc/ioBroker.gigaset-elements/blob/main/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "alarm",
-        "compact": true,
-        "connectionType": "cloud",
-        "dataSource": "poll",
-        "messagebox": true,
-        "materialize": true,
-        "globalDependencies": [
-            {
-                "admin": ">=5.0.0"
-            }
-        ],
-        "dependencies": [
-            {
-                "js-controller": ">=3.1.0"
-            }
-        ]
+  "common": {
+    "name": "gigaset-elements",
+    "version": "0.1.0",
+    "news": {
+      "0.1.0": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "初始发行"
+      },
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "首次出版"
+      }
     },
-    "native": {
-        "email": "",
-        "pass": "",
-        "authInterval": 6,
-        "eventInterval": 60,
-        "elementInterval": 5
+    "title": "Gigaset Elements",
+    "titleLang": {
+      "en": "Gigaset Elements",
+      "de": "Gigaset Elements",
+      "ru": "Элементы Gigaset",
+      "pt": "Elementos Gigaset",
+      "nl": "Gigaset Elements",
+      "fr": "Éléments Gigaset",
+      "it": "Elementi Gigaset",
+      "es": "Elementos de Gigaset",
+      "pl": "Elementy Gigaset",
+      "zh-cn": "千兆元素"
     },
-    "protectedNative": ["pass"],
-    "encryptedNative": ["pass"],
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.maintenance",
-            "type": "state",
-            "common": {
-                "role": "indicator.maintenance",
-                "name": "Gigaset Elements cloud in maintenance mode",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.intrusion",
-            "type": "state",
-            "common": {
-                "role": "indicator.alarm",
-                "name": "whether there is an active intrusion alert",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.intrusionMode",
-            "type": "state",
-            "common": {
-                "role": "text",
-                "name": "configured intrusion mode",
-                "type": "string",
-                "states": {
-                    "custom": "Custom",
-                    "night": "Night",
-                    "home": "Home",
-                    "away": "Away"
-                },
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.userAlarm",
-            "type": "state",
-            "common": {
-                "role": "indicator.alarm",
-                "name": "whether there is an active user alarm",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "Adapter for Gigaset Elements",
+      "de": "Adapter für Gigaset Elements",
+      "ru": "Адаптер для Gigaset Elements",
+      "pt": "Adaptador para Gigaset Elements",
+      "nl": "Adapter voor Gigaset Elements",
+      "fr": "Adaptateur pour Gigaset Elements",
+      "it": "Adattatore per Gigaset Elements",
+      "es": "Adaptador para Gigaset Elements",
+      "pl": "Adapter do Gigaset Elements",
+      "zh-cn": "用于 Gigaset Elements 的适配器"
+    },
+    "authors": [
+      "matthsc <matthsc@gmx.net>"
+    ],
+    "keywords": [
+      "gigaset elements",
+      "security",
+      "alarm"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "build/main.js",
+    "icon": "gigaset-elements.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/matthsc/ioBroker.gigaset-elements/main/admin/gigaset-elements.png",
+    "readme": "https://github.com/matthsc/ioBroker.gigaset-elements/blob/main/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "alarm",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "messagebox": true,
+    "materialize": true,
+    "globalDependencies": [
+      {
+        "admin": ">=5.0.0"
+      }
+    ],
+    "dependencies": [
+      {
+        "js-controller": ">=3.1.0"
+      }
     ]
+  },
+  "native": {
+    "email": "",
+    "pass": "",
+    "authInterval": 6,
+    "eventInterval": 60,
+    "elementInterval": 5
+  },
+  "protectedNative": [
+    "pass"
+  ],
+  "encryptedNative": [
+    "pass"
+  ],
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.maintenance",
+      "type": "state",
+      "common": {
+        "role": "indicator.maintenance",
+        "name": "Gigaset Elements cloud in maintenance mode",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.intrusion",
+      "type": "state",
+      "common": {
+        "role": "indicator.alarm",
+        "name": "whether there is an active intrusion alert",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.intrusionMode",
+      "type": "state",
+      "common": {
+        "role": "text",
+        "name": "configured intrusion mode",
+        "type": "string",
+        "states": {
+          "custom": "Custom",
+          "night": "Night",
+          "home": "Home",
+          "away": "Away"
+        },
+        "read": true,
+        "write": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.userAlarm",
+      "type": "state",
+      "common": {
+        "role": "indicator.alarm",
+        "name": "whether there is an active user alarm",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }

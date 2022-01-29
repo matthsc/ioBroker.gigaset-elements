@@ -116,8 +116,7 @@ sendTo("innoxel.0", "test", { action: "load-events", from: Date, to: Date }, cal
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.1.0 (2022-01-29)
 
 -   (matthsc) initial release
 
