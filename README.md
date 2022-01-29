@@ -36,7 +36,11 @@ After installation, create a new instance and configure the settings:
     -   events (i.e. window/door open/tilt/close) - number of seconds between polling
     -   element/sensor data (i.e. temperature, humidity) - number of minutes between polling
 
-## Supported Elements
+## Limitations
+
+The adapter currently only reads data and does not allow to change anything.
+
+### Supported Elements
 
 So far, the adapter has been tested/is known to work with the following Elements, and test data is available via [gigaset-elements-api](https://github.com/matthsc/gigaset-elements-api):
 
@@ -46,7 +50,7 @@ So far, the adapter has been tested/is known to work with the following Elements
 | um01         | Universal/Window/Door | matthsc   |
 | wd01         | Water                 | matthsc   |
 
-If you have other elements, or encounter event types that are not yet handled by the adapter, you can enable expert mode in ioBroker, go to the _Debug_ tab in the adapter settings, and prepare test data to submit as a github issue for this adapter to get the additional elements/event types included.
+If you have other elements, or encounter event types that are not yet handled by the adapter, you can enable expert mode in ioBroker, go to the _Debug_ tab in the adapter settings (only visible with expert mode), and use "Debug - Prepare test data" to generate test data that can be submitted as part of a github issue for this adapter to get the additional elements/event types included. Personal data like basestation or element names and ids are stripped from the generated data as far as possible.
 
 ## Messages
 
