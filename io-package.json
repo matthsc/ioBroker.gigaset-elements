@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "gigaset-elements",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "news": {
+      "0.1.1": {
+        "en": "implement adapter review feedback",
+        "de": "Feedback zur Adapterüberprüfung implementieren",
+        "ru": "внедрить отзыв об обзоре адаптера",
+        "pt": "implementar feedback de revisão do adaptador",
+        "nl": "feedback over adapterbeoordeling implementeren",
+        "fr": "mise en œuvre des commentaires sur l'examen de l'adaptateur",
+        "it": "implementare il feedback di revisione dell'adattatore",
+        "es": "implementar comentarios de revisión del adaptador",
+        "pl": "zaimplementuj opinię z przeglądu adaptera",
+        "zh-cn": "实施适配器审查反馈"
+      },
       "0.1.0": {
         "en": "initial release",
         "de": "Erstveröffentlichung",
