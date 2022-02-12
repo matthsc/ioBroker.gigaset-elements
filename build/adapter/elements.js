@@ -75,7 +75,7 @@ async function createOrUpdateElement(adapter, element) {
     if (element.batteryStatus)
         statePromises.push(adapter.extendObjectAsync((0, util_1.getStateId)(element, "battery"), (0, util_1.getReadonlyStateObject)({ name: "battery state", type: "string", role: "text" })));
     if (element.positionStatus)
-        statePromises.push(adapter.extendObjectAsync((0, util_1.getStateId)(element, "position"), (0, util_1.getReadonlyStateObject)({ name: "window/door state", type: "number", role: "sensor.window.3" })));
+        statePromises.push(adapter.extendObjectAsync((0, util_1.getStateId)(element, "position"), (0, util_1.getReadonlyStateObject)({ name: "window/door state", type: "number", role: "value.window" })));
     if ((_b = element.states) === null || _b === void 0 ? void 0 : _b.temperature)
         statePromises.push(adapter.extendObjectAsync((0, util_1.getStateId)(element, "temperature"), (0, util_1.getReadonlyStateObject)({ name: "temperature", type: "number", role: "value.temperature", unit: "°C" })));
     if ((_c = element.states) === null || _c === void 0 ? void 0 : _c.pressure)
