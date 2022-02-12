@@ -113,7 +113,7 @@ export async function createOrUpdateElement(adapter: ioBroker.Adapter, element: 
         statePromises.push(
             adapter.extendObjectAsync(
                 getStateId(element, "position"),
-                getReadonlyStateObject({ name: "window/door state", type: "number", role: "sensor.window.3" }),
+                getReadonlyStateObject({ name: "window/door state", type: "number", role: "value.window" }),
             ),
         );
     if (element.states?.temperature)
