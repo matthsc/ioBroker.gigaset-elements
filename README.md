@@ -65,7 +65,7 @@ Callback responses are either <code>{ response: "&lt;message&gt;" }</code> if th
 Send a ping to the adapter, and receive a <code>{ response: "pong" }</code>.
 
 ```ts
-sendTo("innoxel.0", "test", "ping", callback);
+sendTo("gigaset-elements.0", "test", "ping", callback);
 ```
 
 #### Process test data
@@ -73,7 +73,7 @@ sendTo("innoxel.0", "test", "ping", callback);
 Process test data from [gigaset-elements-api](https://github.com/matthsc/gigaset-elements-api). Creates base stations, elements, and processes captured test events.
 
 ```ts
-sendTo("innoxel.0", "test", "process-test-data", callback);
+sendTo("gigaset-elements.0", "test", "process-test-data", callback);
 ```
 
 ### Debugging
@@ -89,7 +89,7 @@ Loads basestations, elements and events from the API, reduces it to minimize the
 Returns the data as an <code>{ response: { bs: [], elements: [], events: [] } }</code> object.
 
 ```ts
-sendTo("innoxel.0", "debug", { action: "prepare-test-data" from?: Date }, callback);
+sendTo("gigaset-elements.0", "debug", { action: "prepare-test-data" from?: Date }, callback);
 ```
 
 #### Load base station and element data
@@ -97,7 +97,7 @@ sendTo("innoxel.0", "debug", { action: "prepare-test-data" from?: Date }, callba
 Loads and returns the raw basestation and elements data as an <code>{ response: { bs: [], elements: []} }</code> object.
 
 ```ts
-sendTo("innoxel.0", "test", { action: "load-bases-elements" }, callback);
+sendTo("gigaset-elements.0", "test", { action: "load-bases-elements" }, callback);
 ```
 
 #### Load events
@@ -107,7 +107,7 @@ Loads events and returns an <code>{ response: { events: [] } }</code> object.
 Event data is usually available for 1 month, older data seems not to be available.
 
 ```ts
-sendTo("innoxel.0", "test", { action: "load-events", from: Date, to: Date }, callback);
+sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Date }, callback);
 ```
 
 ## Changelog
@@ -116,6 +116,7 @@ sendTo("innoxel.0", "test", { action: "load-events", from: Date, to: Date }, cal
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
 ### 0.1.1 (2022-02-12)
 
 -   (matthsc) implement adapter review feedback
