@@ -117,6 +117,10 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
     ### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
+-   (matthsc) fix test data generation
+
 ### 0.1.1 (2022-02-12)
 
 -   (matthsc) implement adapter review feedback

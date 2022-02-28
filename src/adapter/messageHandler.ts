@@ -71,7 +71,7 @@ async function handleDebugMessages(adapter: GigasetElements, obj: ioBroker.Messa
     };
     switch (message?.action) {
         case "prepare-test-data": {
-            const [bs, elements, events] = await retrieveAndPrepareTestData(adapter.api, new Date(message.from));
+            const [bs, elements, events] = await retrieveAndPrepareTestData(adapter.api);
             return { bs, elements, events };
         }
         case "load-bases-elements": {
