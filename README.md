@@ -120,6 +120,7 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 ### **WORK IN PROGRESS**
 
 -   (matthsc) fix test data generation
+-   (matthsc) dependency updates
 
 ### 0.1.1 (2022-02-12)
 
