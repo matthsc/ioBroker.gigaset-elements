@@ -63,7 +63,7 @@ async function handleDebugMessages(adapter, obj) {
     const message = obj.message;
     switch (message === null || message === void 0 ? void 0 : message.action) {
         case "prepare-test-data": {
-            const [bs, elements, events] = await (0, gigaset_elements_api_1.retrieveAndPrepareTestData)(adapter.api, new Date(message.from));
+            const [bs, elements, events] = await (0, gigaset_elements_api_1.retrieveAndPrepareTestData)(adapter.api);
             return { bs, elements, events };
         }
         case "load-bases-elements": {
