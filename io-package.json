@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "gigaset-elements",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "news": {
+      "0.1.2": {
+        "en": "fix test data generation\ndependency updates",
+        "de": "Testdatengenerierung behoben\nAbhängigkeitsaktualisierungen",
+        "ru": "исправить генерацию тестовых данных\nобновления зависимостей",
+        "pt": "corrigir geração de dados de teste\natualizações de dependência",
+        "nl": "genereren van testgegevens herstellen\nafhankelijkheidsupdates",
+        "fr": "correction de la génération de données de test\nmises à jour des dépendances",
+        "it": "correggere la generazione dei dati di prova\naggiornamenti delle dipendenze",
+        "es": "corregir la generación de datos de prueba\nactualizaciones de dependencia",
+        "pl": "napraw generowanie danych testowych\naktualizacje zależności",
+        "zh-cn": "修复测试数据生成\n依赖更新"
+      },
       "0.1.1": {
         "en": "implement adapter review feedback",
         "de": "Feedback zur Adapterüberprüfung implementieren",
