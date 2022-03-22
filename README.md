@@ -116,6 +116,11 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (matthsc) fix "unknown" element position state
+-   (matthsc) add more tests
 ### 0.1.2 (2022-02-28)
 
 -   (matthsc) fix test data generation
