@@ -99,6 +99,7 @@
     "check-all": "npm run check && npm run lint && npm run test",
     "coverage": "nyc npm run test:ts",
     "lint": "eslint --ext .ts,.tsx src/ admin/src/",
+    "prettier": "prettier --config .prettierrc.js \"{src,test}/**/*.ts\" --write",
     "release": "release-script -p iobroker license"
   },
   "nyc": {
