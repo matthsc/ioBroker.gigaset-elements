@@ -53,7 +53,7 @@ class App extends GenericApp {
             <div className="App">
                 <AppContainer
                     expertMode={this.getExpertMode()}
-                    native={this.state.native}
+                    native={this.state.native as ioBroker.AdapterConfig}
                     updateNativeValue={this.updateNativeValue.bind(this)}
                     sendMessage={(command, message) => {
                         const to = `${this.adapterName}.${this.instance}`;

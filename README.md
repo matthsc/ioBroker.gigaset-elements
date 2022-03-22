@@ -121,6 +121,8 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 
 -   (matthsc) fix "unknown" element position state
 -   (matthsc) add more tests
+-   (matthsc) dependency updates
+
 ### 0.1.2 (2022-02-28)
 
 -   (matthsc) fix test data generation
