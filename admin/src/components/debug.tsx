@@ -152,47 +152,49 @@ function Row({
                 <AccordionSummary expandIcon={<ExpandMore />}>{I18n.t(title)}</AccordionSummary>
                 <AccordionDetails>
                     <Grid container direction="column" spacing={2}>
-                        {description && <Grid item>{I18n.t(description)}</Grid>}
-                        <Grid item>
-                            <Grid container spacing={2} alignItems="center">
-                                {buttonRowGridItems &&
-                                    buttonRowGridItems.length > 0 &&
-                                    buttonRowGridItems.map((item, index) => (
-                                        <Grid item key={index}>
-                                            {item}
-                                        </Grid>
-                                    ))}
-                                <Grid item>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={async () => {
-                                            if (confirmText && !confirm(I18n.t(confirmText))) return;
+                        <>
+                            {description && <Grid item>{I18n.t(description)}</Grid>}
+                            <Grid item>
+                                <Grid container spacing={2} alignItems="center">
+                                    {buttonRowGridItems &&
+                                        buttonRowGridItems.length > 0 &&
+                                        buttonRowGridItems.map((item, index) => (
+                                            <Grid item key={index}>
+                                                {item}
+                                            </Grid>
+                                        ))}
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={async () => {
+                                                if (confirmText && !confirm(I18n.t(confirmText))) return;
 
-                                            setLoading(true);
-                                            setData(undefined);
+                                                setLoading(true);
+                                                setData(undefined);
 
-                                            const reply = (await sendMessage(
-                                                command,
-                                                typeof action === "string" ? { action } : action(),
-                                            )) as unknown as { response: typeof data; error?: string };
+                                                const reply = (await sendMessage(
+                                                    command,
+                                                    typeof action === "string" ? { action } : action(),
+                                                )) as unknown as { response: typeof data; error?: string };
 
-                                            if (reply.error) {
-                                                alert(reply.error);
-                                            } else {
-                                                setData(reply.response);
-                                            }
-                                            setLoading(false);
-                                        }}
-                                    >
-                                        {I18n.t(buttonText)}
-                                    </Button>
+                                                if (reply.error) {
+                                                    alert(reply.error);
+                                                } else {
+                                                    setData(reply.response);
+                                                }
+                                                setLoading(false);
+                                            }}
+                                        >
+                                            {I18n.t(buttonText)}
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                        {data && (
-                            <Grid item>{contentRowRenderer ? contentRowRenderer(data) : <Data data={data} />}</Grid>
-                        )}
+                            {data && (
+                                <Grid item>{contentRowRenderer ? contentRowRenderer(data) : <Data data={data} />}</Grid>
+                            )}
+                        </>
                     </Grid>
                 </AccordionDetails>
             </Accordion>
