@@ -119,6 +119,7 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 
 ### **WORK IN PROGRESS**
 
+-   (matthsc) add Node 18 to test matrix
 -   (matthsc) dependency updates
 
 ### 0.1.3 (2022-03-22)
