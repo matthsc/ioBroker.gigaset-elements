@@ -164,8 +164,8 @@ export class GigasetElements extends utils.Adapter {
 
             // load elements
             this.log.debug("Loading elements data...");
-            const { bs01 } = await this.api.getElements();
-            await createOrUpdateElements(this, bs01);
+            const elements = await this.api.getElements();
+            await createOrUpdateElements(this, elements);
 
             // set up timers for periodic events and elements retrieval
             this.log.debug("Starting timers for periodic events/elements retrieval...");
@@ -185,7 +185,7 @@ export class GigasetElements extends utils.Adapter {
     private refreshElements = async (): Promise<void> => {
         this.log.debug("Updating elements");
         const elements = await this.api.getElements();
-        await Promise.all(elements.bs01.map((bs) => updateElements(this, bs.subelements)));
+        await updateElements(this, elements);
     };
 
     /** retrieve and process events */

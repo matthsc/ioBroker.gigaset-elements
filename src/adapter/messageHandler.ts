@@ -57,7 +57,7 @@ async function processTestData(adapter: GigasetElements): Promise<void> {
     ]);
 
     await createOrUpdateBasestations(adapter, basestations);
-    await createOrUpdateElements(adapter, elements.bs01);
+    await createOrUpdateElements(adapter, elements);
     await processEvents(adapter, events.events);
 }
 

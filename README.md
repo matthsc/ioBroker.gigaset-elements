@@ -50,6 +50,12 @@ So far, the adapter has been tested/is known to work with the following Elements
 | um01         | Universal/Window/Door | matthsc   |
 | wd01         | Water                 | matthsc   |
 
+The adapter also supports the following other devices:
+
+| Device type | Friendly name | Event types |
+| ----------- | ------------- | ----------- |
+| gp02        | Phone         | gp.call     |
+
 If you have other elements, or encounter event types that are not yet handled by the adapter, you can enable expert mode in ioBroker, go to the _Debug_ tab in the adapter settings (only visible with expert mode), and use "Debug - Prepare test data" to generate test data that can be submitted as part of a github issue for this adapter to get the additional elements/event types included. Personal data like basestation or element names and ids are stripped from the generated data as far as possible.
 
 ## Messages
@@ -119,6 +125,7 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 
 ### **WORK IN PROGRESS**
 
+-   (matthsc) add support for phones
 -   (matthsc) add Node 18 to test matrix
 -   (matthsc) dependency updates
 

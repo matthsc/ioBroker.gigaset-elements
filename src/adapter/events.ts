@@ -84,6 +84,22 @@ export async function processEvent(adapter: ioBroker.Adapter, event: IEventsItem
         case "user_alarm_end":
             await adapter.setStateChangedAsync("info.userAlarm", event.type.endsWith("start"), true);
             break;
+        case "gp.call": {
+            let stateName = "lastCall";
+            switch (event.o?.call_type) {
+                case "missed":
+                    stateName += "Missed";
+                    break;
+                case "outgoing":
+                    stateName += "Outgoing";
+                    break;
+                default:
+                    stateName += "Incoming";
+                    break;
+            }
+            await adapter.setStateAsync(getStateId(event, stateName), event.o?.clip ?? "<unknown>", true);
+            break;
+        }
         default:
             adapter.log.info("Unknown event type: " + JSON.stringify(event.type));
             break;

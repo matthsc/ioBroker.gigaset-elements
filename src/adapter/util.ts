@@ -1,30 +1,49 @@
-import type { IEventsItem, ISubelementsItem } from "gigaset-elements-api";
+import type { IEventsItem, IGp02Item, ISubelementsItem } from "gigaset-elements-api";
 
-function isSubelementsItem(item: unknown): item is ISubelementsItem {
-    return Object.prototype.hasOwnProperty.call(item, "connectionStatus");
+export function isSubelementsItem(item: unknown): item is ISubelementsItem {
+    return (
+        Object.prototype.hasOwnProperty.call(item, "connectionStatus") &&
+        Object.prototype.hasOwnProperty.call(item, "type")
+    );
 }
 
-function isEventsItem(item: unknown): item is IEventsItem {
-    return Object.prototype.hasOwnProperty.call(item, "source_id") && Object.prototype.hasOwnProperty.call(item, "o");
+export function isEventsItem(item: unknown): item is IEventsItem {
+    return Object.prototype.hasOwnProperty.call(item, "ts");
+}
+
+export function isGp02Item(item: unknown): item is IGp02Item {
+    return (
+        Object.prototype.hasOwnProperty.call(item, "connectionStatus") &&
+        !Object.prototype.hasOwnProperty.call(item, "type")
+    );
 }
 
 export function getSubelementType(element: ISubelementsItem): string {
     return element.type.split(".")[1]; // i.e. "bs01.um01"
 }
 
-export function getStateId(element: ISubelementsItem | IEventsItem, state: string): string {
+export function getStateId(element: ISubelementsItem | IEventsItem | IGp02Item, state: string): string {
     if (isEventsItem(element)) {
-        if (!element.o?.type || !element.o?.id) return "";
+        if (!element.o?.type) return "";
         const type = element.o.type;
-        const id = element.o.id;
-        const baseId = element.source_id;
-        return `${baseId}.${type}-${id}.${state}`;
+        if (type === "gp02.call") {
+            return `gp02-${element.source_id}.${state}`;
+        } else {
+            const id = element.o.id;
+            const baseId = element.source_id;
+            return `${baseId}.${type}-${id}.${state}`;
+        }
     }
     if (isSubelementsItem(element)) {
         return `${getChannelId(element)}.${state}`;
     }
+    if (isGp02Item(element)) {
+        return `gp02-${element.id}.${state}`;
+    }
 
-    throw new Error("Unsupported element type, or element properties not initialized properly");
+    throw new Error(
+        "Unsupported element type, or element properties not initialized properly: " + JSON.stringify(element),
+    );
 }
 
 export function getChannelId(element: ISubelementsItem): string {

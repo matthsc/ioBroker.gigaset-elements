@@ -9,10 +9,11 @@ loadEvents(true).then((eventRoot) => {
         let adapterMock: GigasetElements;
 
         beforeEach(() => {
-            const setStateAsyncMock = Sinon.fake();
-            setStateAsyncMock.returnValues = [Promise.resolve()];
+            const resolveFake = Sinon.fake();
+            resolveFake.returnValues = [Promise.resolve()];
             adapterMock = {
-                setStateChangedAsync: setStateAsyncMock,
+                setStateChangedAsync: resolveFake,
+                setStateAsync: resolveFake,
                 log: {
                     info: Sinon.fake(),
                 } as Partial<ioBroker.Logger> as ioBroker.Logger,
