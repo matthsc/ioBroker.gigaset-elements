@@ -11,9 +11,11 @@ export function convertSensorStateToId(state: string): number {
         case "probably_closed":
         case "unknown":
             return 0;
+        case "probably_tilted":
         case "tilted":
         case "tilt":
             return 1;
+        case "probably_opened":
         case "opened":
         case "open":
             return 2;
