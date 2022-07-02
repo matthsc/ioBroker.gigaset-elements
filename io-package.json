@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "gigaset-elements",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "news": {
+      "0.2.1": {
+        "en": "add initial support for smoke detectors\ndependency updates",
+        "de": "erste unterstützung für rauchmelder hinzufügen\nabhängigkeitsaktualisierung",
+        "ru": "добавить начальную поддержку детекторов дыма\nобновления зависимости",
+        "pt": "adicionar suporte inicial para detectores de fumaça\natualizações de dependência",
+        "nl": "voeg de eerste steun toe aan rookdetectoren\nafhankelijke updates",
+        "fr": "ajouter un support initial pour les détecteurs de fumée\nmises à jour de la dépendance",
+        "it": "aggiungere il supporto iniziale per i rilevatori di fumo\naggiornamenti di dipendenza",
+        "es": "añadir soporte inicial para detectores de humo\nactualizaciones de la dependencia",
+        "pl": "początkowe wsparcie\naktualizacja",
+        "zh-cn": "增加吸烟探测器的初步支助\n依赖性最新资料"
+      },
       "0.2.0": {
         "en": "add support for phones\nadd Node 18 to test matrix\ndependency updates",
         "de": "Unterstützung für Telefone hinzufügen\nKnoten 18 zur Testmatrix hinzufügen\nAbhängigkeitsaktualisierungen",
