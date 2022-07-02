@@ -9,7 +9,33 @@ import {
     loadElements,
     loadEvents,
 } from "gigaset-elements-api";
-import { getChannelId, getReadonlyStateObject, getStateId, isEventsItem, isGp02Item, isSubelementsItem } from "./util";
+import {
+    getChannelId,
+    getReadonlyStateObject,
+    getStateId,
+    isDefined,
+    isEventsItem,
+    isGp02Item,
+    isSubelementsItem,
+} from "./util";
+
+describe("isDefined", () => {
+    it("returns false if the object is null or undefined", () => {
+        assert.isFalse(isDefined(undefined, "test" as never));
+        assert.isFalse(isDefined(null, "test" as never));
+    });
+    it("returns false if the object doesn't own the given property, or it is null or undefined", () => {
+        assert.isFalse(isDefined({}, "test" as never));
+        assert.isFalse(isDefined({ abc: 1 }, "test" as never));
+        assert.isFalse(isDefined({ test: undefined }, "test"));
+        assert.isFalse(isDefined({ test: null }, "test"));
+    });
+    it("returns true if an object owns the given property", () => {
+        assert.isTrue(isDefined({ test: 0 }, "test"));
+        assert.isTrue(isDefined({ test: "" }, "test"));
+        assert.isTrue(isDefined({ test: "abc" }, "test"));
+    });
+});
 
 Promise.all([loadBaseStations(true), loadElements(true), loadEvents(true)]).then(([_, elementsData, eventsData]) => {
     describe("getStateId", () => {
@@ -102,6 +128,7 @@ Promise.all([loadBaseStations(true), loadElements(true), loadEvents(true)]).then
                 "isl01.configuration_changed.user.intrusion_mode",
                 "user_alarm_end",
                 "user_alarm_start",
+                "end_sd01_test",
             ];
             for (const event of eventsData.events.filter((e) => !emptyEvents.includes(e.type))) {
                 assertId(event);

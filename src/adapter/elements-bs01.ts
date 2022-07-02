@@ -1,6 +1,6 @@
 import type { IBs01Item, ISubelementsItem } from "gigaset-elements-api";
 import { convertSensorStateToId } from "./convert";
-import { getChannelId, getReadonlyStateObject, getStateId } from "./util";
+import { getChannelId, getReadonlyStateObject, getStateId, isDefined } from "./util";
 
 /**
  * create bs01 elements objects and states, and updates state data
@@ -137,6 +137,59 @@ export async function createOrUpdateElementBs01(adapter: ioBroker.Adapter, eleme
                 getReadonlyStateObject({ name: "humidity", type: "number", role: "value.humidity", unit: "%" }),
             ),
         );
+    if (isDefined(element.states, "testRequired") || isDefined(element, "testRequired"))
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "testRequired"),
+                getReadonlyStateObject({ name: "testRequired", type: "boolean", role: "indicator.maintenance" }),
+            ),
+        );
+    if (isDefined(element, "smokeDetected"))
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "smokeDetected"),
+                getReadonlyStateObject({ name: "smokeDetected", type: "boolean", role: "indicator.alarm.fire" }),
+            ),
+        );
+    if (isDefined(element, "unmounted"))
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "unmounted"),
+                getReadonlyStateObject({ name: "unmounted", type: "boolean", role: "indicator" }),
+            ),
+        );
+    if (isDefined(element, "permanentBatteryLow"))
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "permanentBatteryLow"),
+                getReadonlyStateObject({ name: "permanentBatteryLow", type: "boolean", role: "indicator.lowbat" }),
+            ),
+        );
+    if (isDefined(element, "permanentBatteryChangeRequest"))
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "permanentBatteryChangeRequest"),
+                getReadonlyStateObject({
+                    name: "permanentBatteryChangeRequest",
+                    type: "boolean",
+                    role: "indicator.maintenance.lowbat",
+                }),
+            ),
+        );
+    if (isDefined(element, "smokeChamberFail"))
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "smokeChamberFail"),
+                getReadonlyStateObject({ name: "smokeChamberFail", type: "boolean", role: "indicator.maintenance" }),
+            ),
+        );
+    if (isDefined(element, "smokeDetectorOff"))
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "smokeDetectorOff"),
+                getReadonlyStateObject({ name: "smokeDetectorOff", type: "boolean", role: "indicator" }),
+            ),
+        );
 
     await Promise.all(statePromises);
     await updateElementBs01(adapter, element);
@@ -191,6 +244,42 @@ export async function updateElementBs01(adapter: ioBroker.Adapter, element: ISub
         updates.push(adapter.setStateChangedAsync(getStateId(element, "pressure"), element.states.pressure, true));
     if (element.states?.humidity)
         updates.push(adapter.setStateChangedAsync(getStateId(element, "humidity"), element.states.humidity, true));
+    if (isDefined(element.states, "testRequired") || isDefined(element, "testRequired"))
+        updates.push(
+            adapter.setStateChangedAsync(
+                getStateId(element, "testRequired"),
+                element.testRequired || element.states?.testRequired ? true : false,
+                true,
+            ),
+        );
+    if (isDefined(element, "smokeDetected"))
+        updates.push(adapter.setStateChangedAsync(getStateId(element, "smokeDetected"), element.smokeDetected!, true));
+    if (isDefined(element, "unmounted"))
+        updates.push(adapter.setStateChangedAsync(getStateId(element, "unmounted"), element.unmounted!, true));
+    if (isDefined(element, "permanentBatteryLow"))
+        updates.push(
+            adapter.setStateChangedAsync(
+                getStateId(element, "permanentBatteryLow"),
+                element.permanentBatteryLow!,
+                true,
+            ),
+        );
+    if (isDefined(element, "permanentBatteryChangeRequest"))
+        updates.push(
+            adapter.setStateChangedAsync(
+                getStateId(element, "permanentBatteryChangeRequest"),
+                element.permanentBatteryChangeRequest!,
+                true,
+            ),
+        );
+    if (isDefined(element, "smokeChamberFail"))
+        updates.push(
+            adapter.setStateChangedAsync(getStateId(element, "smokeChamberFail"), element.smokeChamberFail!, true),
+        );
+    if (isDefined(element, "smokeDetectorOff"))
+        updates.push(
+            adapter.setStateChangedAsync(getStateId(element, "smokeDetectorOff"), element.smokeDetectorOff!, true),
+        );
 
     await Promise.all(updates);
 }

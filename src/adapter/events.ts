@@ -80,6 +80,13 @@ export async function processEvent(adapter: ioBroker.Adapter, event: IEventsItem
         case "water_no_longer_detected":
             await adapter.setStateChangedAsync(getStateId(event, "alarm"), false, true);
             break;
+        case "test":
+            // seen from sd01
+            // do nothing, since the end_sd01_test doesn't include sensor id and cannot be reset anymore, without guessing
+            break;
+        case "end_sd01_test":
+            // event doesn't include sensor id :-(
+            break;
         case "user_alarm_start":
         case "user_alarm_end":
             await adapter.setStateChangedAsync("info.userAlarm", event.type.endsWith("start"), true);

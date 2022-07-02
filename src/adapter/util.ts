@@ -1,5 +1,11 @@
 import type { IEventsItem, IGp02Item, ISubelementsItem } from "gigaset-elements-api";
 
+export function isDefined<T>(object: T | undefined, prop: keyof T): boolean {
+    if (!object) return false;
+    const value = object[prop];
+    return Object.prototype.hasOwnProperty.call(object, prop) && value !== undefined && value !== null;
+}
+
 export function isSubelementsItem(item: unknown): item is ISubelementsItem {
     return (
         Object.prototype.hasOwnProperty.call(item, "connectionStatus") &&
