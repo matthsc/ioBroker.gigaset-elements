@@ -122,6 +122,11 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (matthsc) dependency updates
+
 ### 0.2.0 (2022-04-30)
 
 -   (matthsc) add support for phones

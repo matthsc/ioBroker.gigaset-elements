@@ -6,24 +6,6 @@ import path from "path";
 
 chaiUse(chaiAsPromised);
 
-const delay = (ms: number) =>
-    new Promise<void>((resolve) => {
-        setTimeout(() => {
-            resolve();
-        }, ms);
-    });
-
-const getHarnessAndStartAdapter = async (getHarness: () => TestHarness): Promise<TestHarness> => {
-    // Create a fresh harness instance each test!
-    const harness = getHarness();
-    // Start the adapter and wait until it has started
-    await harness.startAdapterAndWait();
-    // seems we need to wait a little before we can send messages
-    await delay(500);
-    // return harness
-    return harness;
-};
-
 const sendMessage = (
     harness: TestHarness,
     command: string,
@@ -32,6 +14,7 @@ const sendMessage = (
     return new Promise<ioBroker.Message | undefined>((resolve, reject) => {
         harness.sendTo("gigaset-elements.0", command, message, (response) => {
             console.log("=============================================");
+            console.log("%o %o", command, message);
             console.log(response);
             console.log("=============================================");
 
@@ -51,29 +34,46 @@ tests.integration(path.join(__dirname, ".."), {
     // allowedExitCodes: [11],
 
     // Define your own tests inside defineAdditionalTests
-    // Since the tests are heavily instrumented, you need to create and use a so called "harness" to control the tests.
-    defineAdditionalTests(getHarness: () => TestHarness) {
-        describe("sendTo()", function () {
-            this.timeout(5000);
+    defineAdditionalTests({ suite }) {
+        // All tests (it, describe) must be grouped in one or more suites. Each suite sets up a fresh environment for the adapter tests.
+        // At the beginning of each suite, the databases will be reset and the adapter will be started.
+        // The adapter will run until the end of each suite.
 
-            it("should answer a ping", async () => {
-                const harness = await getHarnessAndStartAdapter(getHarness);
-                await sendMessage(harness, "test", "ping");
-            });
+        // Since the tests are heavily instrumented, each suite gives access to a so called "harness" to control the tests.
+        suite("sendTo()", function (getHarness) {
+            describe("", function () {
+                this.timeout(5000);
 
-            it("should throw on unknown messages", async () => {
-                const harness = await getHarnessAndStartAdapter(getHarness);
-                assert.isRejected(sendMessage(harness, "unknown"));
+                let harness: TestHarness;
+                before(async () => {
+                    harness = getHarness();
+                    await harness.startAdapterAndWait();
+                });
+
+                it("should answer a ping", async () => {
+                    await sendMessage(harness, "test", "ping");
+                });
+
+                it("should throw on unknown messages", async () => {
+                    assert.isRejected(sendMessage(harness, "unknown"));
+                });
             });
         });
 
-        // describe("test-data", function () {
-        //     this.timeout(5000);
+        // suite("test-data", function (getHarness) {
+        //     describe("test-data", function () {
+        //         this.timeout(5000);
 
-        // this doesn't seem to work in integration test, maybe because of the parallelism when creating states
-        //     it("should be processed without throwing an error", async () => {
-        //         const harness = await getHarnessAndStartAdapter(getHarness);
-        //         await sendMessage(harness, "test", "process-test-data");
+        //         let harness: TestHarness;
+        //         before(async () => {
+        //             harness = getHarness();
+        //             await harness.startAdapterAndWait();
+        //         });
+
+        //         // this doesn't seem to work in integration test, maybe because of the parallelism when creating states
+        //         it("should be processed without throwing an error", async () => {
+        //             await sendMessage(harness, "test", "process-test-data");
+        //         });
         //     });
         // });
     },
