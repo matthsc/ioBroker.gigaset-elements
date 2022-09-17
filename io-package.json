@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "gigaset-elements",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "news": {
+      "0.2.2": {
+        "en": "fix probably_open state\ndependency updates",
+        "de": "wahrscheinlich_offen zustand\nabhängigkeitsaktualisierung",
+        "ru": "исправить вероятно_открыть состояние\nобновления зависимости",
+        "pt": "corrigir estado provavelmente_open\natualizações de dependência",
+        "nl": "vermoedelijk de staat\nafhankelijke updates",
+        "fr": "correction probablement_open state\nmises à jour de la dépendance",
+        "it": "fix probabilmente_open stato\naggiornamenti di dipendenza",
+        "es": "arreglar probablemente_ estado abierto\nactualizaciones de la dependencia",
+        "pl": "stan zapewne\naktualizacja",
+        "zh-cn": "fix\n依赖性最新资料"
+      },
       "0.2.1": {
         "en": "add initial support for smoke detectors\ndependency updates",
         "de": "erste unterstützung für rauchmelder hinzufügen\nabhängigkeitsaktualisierung",
@@ -74,18 +86,6 @@
         "es": "Versión inicial",
         "pl": "Pierwsze wydanie",
         "zh-cn": "初始发行"
-      },
-      "0.0.1": {
-        "en": "initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Начальная версия",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "zh-cn": "首次出版"
       }
     },
     "title": "Gigaset Elements",
