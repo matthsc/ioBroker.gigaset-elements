@@ -126,6 +126,7 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 
 ### **WORK IN PROGRESS**
 
+-   (matthsc) fix probably_open state
 -   (matthsc) dependency updates
 
 ### 0.2.1 (2022-07-02)

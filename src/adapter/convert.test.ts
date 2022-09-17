@@ -22,9 +22,11 @@ describe("convertSensorStateToId", () => {
     it("converts tilt", () => {
         assert.equal(convertSensorStateToId("tilt"), 1);
         assert.equal(convertSensorStateToId("tilted"), 1);
+        assert.equal(convertSensorStateToId("probably_tilted"), 1);
     });
     it("converts open", () => {
         assert.equal(convertSensorStateToId("open"), 2);
+        assert.equal(convertSensorStateToId("probably_open"), 2);
         assert.equal(convertSensorStateToId("opened"), 2);
     });
 });
