@@ -123,6 +123,11 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (matthsc) dependency updates
+
 ### 0.2.1 (2022-07-02)
 
 -   (matthsc) add initial support for smoke detectors
