@@ -1,244 +1,235 @@
 {
-  "common": {
-    "name": "gigaset-elements",
-    "version": "0.2.2",
-    "news": {
-      "0.2.2": {
-        "en": "fix probably_open state\ndependency updates",
-        "de": "wahrscheinlich_offen zustand\nabhängigkeitsaktualisierung",
-        "ru": "исправить вероятно_открыть состояние\nобновления зависимости",
-        "pt": "corrigir estado provavelmente_open\natualizações de dependência",
-        "nl": "vermoedelijk de staat\nafhankelijke updates",
-        "fr": "correction probablement_open state\nmises à jour de la dépendance",
-        "it": "fix probabilmente_open stato\naggiornamenti di dipendenza",
-        "es": "arreglar probablemente_ estado abierto\nactualizaciones de la dependencia",
-        "pl": "stan zapewne\naktualizacja",
-        "zh-cn": "fix\n依赖性最新资料"
-      },
-      "0.2.1": {
-        "en": "add initial support for smoke detectors\ndependency updates",
-        "de": "erste unterstützung für rauchmelder hinzufügen\nabhängigkeitsaktualisierung",
-        "ru": "добавить начальную поддержку детекторов дыма\nобновления зависимости",
-        "pt": "adicionar suporte inicial para detectores de fumaça\natualizações de dependência",
-        "nl": "voeg de eerste steun toe aan rookdetectoren\nafhankelijke updates",
-        "fr": "ajouter un support initial pour les détecteurs de fumée\nmises à jour de la dépendance",
-        "it": "aggiungere il supporto iniziale per i rilevatori di fumo\naggiornamenti di dipendenza",
-        "es": "añadir soporte inicial para detectores de humo\nactualizaciones de la dependencia",
-        "pl": "początkowe wsparcie\naktualizacja",
-        "zh-cn": "增加吸烟探测器的初步支助\n依赖性最新资料"
-      },
-      "0.2.0": {
-        "en": "add support for phones\nadd Node 18 to test matrix\ndependency updates",
-        "de": "Unterstützung für Telefone hinzufügen\nKnoten 18 zur Testmatrix hinzufügen\nAbhängigkeitsaktualisierungen",
-        "ru": "добавить поддержку телефонов\nдобавить узел 18 в тестовую матрицу\nобновления зависимостей",
-        "pt": "adicionar suporte para telefones\nadicione o nó 18 à matriz de teste\natualizações de dependência",
-        "nl": "ondersteuning voor telefoons toevoegen\nvoeg Knooppunt 18 toe aan de testmatrix\nafhankelijkheidsupdates",
-        "fr": "ajouter le support pour les téléphones\najouter le nœud 18 à la matrice de test\nmises à jour des dépendances",
-        "it": "aggiungi il supporto per i telefoni\naggiungi il nodo 18 per testare la matrice\naggiornamenti delle dipendenze",
-        "es": "añadir soporte para teléfonos\nagregue el nodo 18 a la matriz de prueba\nactualizaciones de dependencia",
-        "pl": "dodaj wsparcie dla telefonów\ndodaj Węzeł 18 do macierzy testowej\naktualizacje zależności",
-        "zh-cn": "添加对手机的支持\n将节点 18 添加到测试矩阵\n依赖更新"
-      },
-      "0.1.3": {
-        "en": "fix \"unknown\" element position state\nadd more tests\ndependency updates",
-        "de": "\"unbekannter\" Elementpositionsstatus behoben\nweitere Prüfungen hinzufügen\nAbhängigkeitsaktualisierungen",
-        "ru": "исправить положение \"неизвестного\" элемента\nдобавить больше тестов\nобновления зависимостей",
-        "pt": "corrigir o estado de posição do elemento \"desconhecido\"\nadicionar mais testes\natualizações de dependência",
-        "nl": "fix \"onbekende\" status van elementpositie\nmeer testen toevoegen\nafhankelijkheidsupdates",
-        "fr": "correction de l'état de position de l'élément \"inconnu\"\najouter plus de tests\nmises à jour des dépendances",
-        "it": "correggere lo stato di posizione dell'elemento \"sconosciuto\".\naggiungi altri test\naggiornamenti delle dipendenze",
-        "es": "corregir el estado de posición del elemento \"desconocido\"\nañadir más pruebas\nactualizaciones de dependencia",
-        "pl": "napraw \"nieznany\" stan pozycji elementu;\ndodaj więcej testów\naktualizacje zależności",
-        "zh-cn": "修复“未知”元素位置状态\n添加更多测试\n依赖更新"
-      },
-      "0.1.2": {
-        "en": "fix test data generation\ndependency updates",
-        "de": "Testdatengenerierung behoben\nAbhängigkeitsaktualisierungen",
-        "ru": "исправить генерацию тестовых данных\nобновления зависимостей",
-        "pt": "corrigir geração de dados de teste\natualizações de dependência",
-        "nl": "genereren van testgegevens herstellen\nafhankelijkheidsupdates",
-        "fr": "correction de la génération de données de test\nmises à jour des dépendances",
-        "it": "correggere la generazione dei dati di prova\naggiornamenti delle dipendenze",
-        "es": "corregir la generación de datos de prueba\nactualizaciones de dependencia",
-        "pl": "napraw generowanie danych testowych\naktualizacje zależności",
-        "zh-cn": "修复测试数据生成\n依赖更新"
-      },
-      "0.1.1": {
-        "en": "implement adapter review feedback",
-        "de": "Feedback zur Adapterüberprüfung implementieren",
-        "ru": "внедрить отзыв об обзоре адаптера",
-        "pt": "implementar feedback de revisão do adaptador",
-        "nl": "feedback over adapterbeoordeling implementeren",
-        "fr": "mise en œuvre des commentaires sur l'examen de l'adaptateur",
-        "it": "implementare il feedback di revisione dell'adattatore",
-        "es": "implementar comentarios de revisión del adaptador",
-        "pl": "zaimplementuj opinię z przeglądu adaptera",
-        "zh-cn": "实施适配器审查反馈"
-      },
-      "0.1.0": {
-        "en": "initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Начальная версия",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "zh-cn": "初始发行"
-      }
-    },
-    "title": "Gigaset Elements",
-    "titleLang": {
-      "en": "Gigaset Elements",
-      "de": "Gigaset Elements",
-      "ru": "Элементы Gigaset",
-      "pt": "Elementos Gigaset",
-      "nl": "Gigaset Elements",
-      "fr": "Éléments Gigaset",
-      "it": "Elementi Gigaset",
-      "es": "Elementos de Gigaset",
-      "pl": "Elementy Gigaset",
-      "zh-cn": "千兆元素"
-    },
-    "desc": {
-      "en": "Adapter for Gigaset Elements",
-      "de": "Adapter für Gigaset Elements",
-      "ru": "Адаптер для Gigaset Elements",
-      "pt": "Adaptador para Gigaset Elements",
-      "nl": "Adapter voor Gigaset Elements",
-      "fr": "Adaptateur pour Gigaset Elements",
-      "it": "Adattatore per Gigaset Elements",
-      "es": "Adaptador para Gigaset Elements",
-      "pl": "Adapter do Gigaset Elements",
-      "zh-cn": "用于 Gigaset Elements 的适配器"
-    },
-    "authors": [
-      "matthsc <matthsc@gmx.net>"
-    ],
-    "keywords": [
-      "gigaset elements",
-      "security",
-      "alarm"
-    ],
-    "license": "MIT",
-    "platform": "Javascript/Node.js",
-    "main": "build/main.js",
-    "icon": "gigaset-elements.png",
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/matthsc/ioBroker.gigaset-elements/main/admin/gigaset-elements.png",
-    "readme": "https://github.com/matthsc/ioBroker.gigaset-elements/blob/main/README.md",
-    "loglevel": "info",
-    "mode": "daemon",
-    "type": "alarm",
-    "compact": true,
-    "connectionType": "cloud",
-    "dataSource": "poll",
-    "messagebox": true,
-    "materialize": true,
-    "globalDependencies": [
-      {
-        "admin": ">=5.0.0"
-      }
-    ],
-    "dependencies": [
-      {
-        "js-controller": ">=3.1.0"
-      }
-    ]
-  },
-  "native": {
-    "email": "",
-    "pass": "",
-    "authInterval": 6,
-    "eventInterval": 60,
-    "elementInterval": 5
-  },
-  "protectedNative": [
-    "pass"
-  ],
-  "encryptedNative": [
-    "pass"
-  ],
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "info",
-      "type": "channel",
-      "common": {
-        "name": "Information"
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.connection",
-      "type": "state",
-      "common": {
-        "role": "indicator.connected",
-        "name": "Device or service connected",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.maintenance",
-      "type": "state",
-      "common": {
-        "role": "indicator.maintenance",
-        "name": "Gigaset Elements cloud in maintenance mode",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.intrusion",
-      "type": "state",
-      "common": {
-        "role": "indicator.alarm",
-        "name": "whether there is an active intrusion alert",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.intrusionMode",
-      "type": "state",
-      "common": {
-        "role": "text",
-        "name": "configured intrusion mode",
-        "type": "string",
-        "states": {
-          "custom": "Custom",
-          "night": "Night",
-          "home": "Home",
-          "away": "Away"
+    "common": {
+        "name": "gigaset-elements",
+        "version": "0.2.2",
+        "news": {
+            "0.2.2": {
+                "en": "fix probably_open state\ndependency updates",
+                "de": "wahrscheinlich_offen zustand\nabhängigkeitsaktualisierung",
+                "ru": "исправить вероятно_открыть состояние\nобновления зависимости",
+                "pt": "corrigir estado provavelmente_open\natualizações de dependência",
+                "nl": "vermoedelijk de staat\nafhankelijke updates",
+                "fr": "correction probablement_open state\nmises à jour de la dépendance",
+                "it": "fix probabilmente_open stato\naggiornamenti di dipendenza",
+                "es": "arreglar probablemente_ estado abierto\nactualizaciones de la dependencia",
+                "pl": "stan zapewne\naktualizacja",
+                "zh-cn": "fix\n依赖性最新资料"
+            },
+            "0.2.1": {
+                "en": "add initial support for smoke detectors\ndependency updates",
+                "de": "erste unterstützung für rauchmelder hinzufügen\nabhängigkeitsaktualisierung",
+                "ru": "добавить начальную поддержку детекторов дыма\nобновления зависимости",
+                "pt": "adicionar suporte inicial para detectores de fumaça\natualizações de dependência",
+                "nl": "voeg de eerste steun toe aan rookdetectoren\nafhankelijke updates",
+                "fr": "ajouter un support initial pour les détecteurs de fumée\nmises à jour de la dépendance",
+                "it": "aggiungere il supporto iniziale per i rilevatori di fumo\naggiornamenti di dipendenza",
+                "es": "añadir soporte inicial para detectores de humo\nactualizaciones de la dependencia",
+                "pl": "początkowe wsparcie\naktualizacja",
+                "zh-cn": "增加吸烟探测器的初步支助\n依赖性最新资料"
+            },
+            "0.2.0": {
+                "en": "add support for phones\nadd Node 18 to test matrix\ndependency updates",
+                "de": "Unterstützung für Telefone hinzufügen\nKnoten 18 zur Testmatrix hinzufügen\nAbhängigkeitsaktualisierungen",
+                "ru": "добавить поддержку телефонов\nдобавить узел 18 в тестовую матрицу\nобновления зависимостей",
+                "pt": "adicionar suporte para telefones\nadicione o nó 18 à matriz de teste\natualizações de dependência",
+                "nl": "ondersteuning voor telefoons toevoegen\nvoeg Knooppunt 18 toe aan de testmatrix\nafhankelijkheidsupdates",
+                "fr": "ajouter le support pour les téléphones\najouter le nœud 18 à la matrice de test\nmises à jour des dépendances",
+                "it": "aggiungi il supporto per i telefoni\naggiungi il nodo 18 per testare la matrice\naggiornamenti delle dipendenze",
+                "es": "añadir soporte para teléfonos\nagregue el nodo 18 a la matriz de prueba\nactualizaciones de dependencia",
+                "pl": "dodaj wsparcie dla telefonów\ndodaj Węzeł 18 do macierzy testowej\naktualizacje zależności",
+                "zh-cn": "添加对手机的支持\n将节点 18 添加到测试矩阵\n依赖更新"
+            },
+            "0.1.3": {
+                "en": "fix \"unknown\" element position state\nadd more tests\ndependency updates",
+                "de": "\"unbekannter\" Elementpositionsstatus behoben\nweitere Prüfungen hinzufügen\nAbhängigkeitsaktualisierungen",
+                "ru": "исправить положение \"неизвестного\" элемента\nдобавить больше тестов\nобновления зависимостей",
+                "pt": "corrigir o estado de posição do elemento \"desconhecido\"\nadicionar mais testes\natualizações de dependência",
+                "nl": "fix \"onbekende\" status van elementpositie\nmeer testen toevoegen\nafhankelijkheidsupdates",
+                "fr": "correction de l'état de position de l'élément \"inconnu\"\najouter plus de tests\nmises à jour des dépendances",
+                "it": "correggere lo stato di posizione dell'elemento \"sconosciuto\".\naggiungi altri test\naggiornamenti delle dipendenze",
+                "es": "corregir el estado de posición del elemento \"desconocido\"\nañadir más pruebas\nactualizaciones de dependencia",
+                "pl": "napraw \"nieznany\" stan pozycji elementu;\ndodaj więcej testów\naktualizacje zależności",
+                "zh-cn": "修复“未知”元素位置状态\n添加更多测试\n依赖更新"
+            },
+            "0.1.2": {
+                "en": "fix test data generation\ndependency updates",
+                "de": "Testdatengenerierung behoben\nAbhängigkeitsaktualisierungen",
+                "ru": "исправить генерацию тестовых данных\nобновления зависимостей",
+                "pt": "corrigir geração de dados de teste\natualizações de dependência",
+                "nl": "genereren van testgegevens herstellen\nafhankelijkheidsupdates",
+                "fr": "correction de la génération de données de test\nmises à jour des dépendances",
+                "it": "correggere la generazione dei dati di prova\naggiornamenti delle dipendenze",
+                "es": "corregir la generación de datos de prueba\nactualizaciones de dependencia",
+                "pl": "napraw generowanie danych testowych\naktualizacje zależności",
+                "zh-cn": "修复测试数据生成\n依赖更新"
+            },
+            "0.1.1": {
+                "en": "implement adapter review feedback",
+                "de": "Feedback zur Adapterüberprüfung implementieren",
+                "ru": "внедрить отзыв об обзоре адаптера",
+                "pt": "implementar feedback de revisão do adaptador",
+                "nl": "feedback over adapterbeoordeling implementeren",
+                "fr": "mise en œuvre des commentaires sur l'examen de l'adaptateur",
+                "it": "implementare il feedback di revisione dell'adattatore",
+                "es": "implementar comentarios de revisión del adaptador",
+                "pl": "zaimplementuj opinię z przeglądu adaptera",
+                "zh-cn": "实施适配器审查反馈"
+            },
+            "0.1.0": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "初始发行"
+            }
         },
-        "read": true,
-        "write": true
-      },
-      "native": {}
+        "title": "Gigaset Elements",
+        "titleLang": {
+            "en": "Gigaset Elements",
+            "de": "Gigaset Elements",
+            "ru": "Элементы Gigaset",
+            "pt": "Elementos Gigaset",
+            "nl": "Gigaset Elements",
+            "fr": "Éléments Gigaset",
+            "it": "Elementi Gigaset",
+            "es": "Elementos de Gigaset",
+            "pl": "Elementy Gigaset",
+            "zh-cn": "千兆元素"
+        },
+        "desc": {
+            "en": "Adapter for Gigaset Elements",
+            "de": "Adapter für Gigaset Elements",
+            "ru": "Адаптер для Gigaset Elements",
+            "pt": "Adaptador para Gigaset Elements",
+            "nl": "Adapter voor Gigaset Elements",
+            "fr": "Adaptateur pour Gigaset Elements",
+            "it": "Adattatore per Gigaset Elements",
+            "es": "Adaptador para Gigaset Elements",
+            "pl": "Adapter do Gigaset Elements",
+            "zh-cn": "用于 Gigaset Elements 的适配器"
+        },
+        "authors": ["matthsc <matthsc@gmx.net>"],
+        "keywords": ["gigaset elements", "security", "alarm"],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "gigaset-elements.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/matthsc/ioBroker.gigaset-elements/main/admin/gigaset-elements.png",
+        "readme": "https://github.com/matthsc/ioBroker.gigaset-elements/blob/main/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "alarm",
+        "compact": true,
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "messagebox": true,
+        "materialize": true,
+        "eraseOnUpload": true,
+        "globalDependencies": [
+            {
+                "admin": ">=5.0.0"
+            }
+        ],
+        "dependencies": [
+            {
+                "js-controller": ">=3.1.0"
+            }
+        ]
     },
-    {
-      "_id": "info.userAlarm",
-      "type": "state",
-      "common": {
-        "role": "indicator.alarm",
-        "name": "whether there is an active user alarm",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    }
-  ]
+    "native": {
+        "email": "",
+        "pass": "",
+        "authInterval": 6,
+        "eventInterval": 60,
+        "elementInterval": 5
+    },
+    "protectedNative": ["pass"],
+    "encryptedNative": ["pass"],
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.maintenance",
+            "type": "state",
+            "common": {
+                "role": "indicator.maintenance",
+                "name": "Gigaset Elements cloud in maintenance mode",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.intrusion",
+            "type": "state",
+            "common": {
+                "role": "indicator.alarm",
+                "name": "whether there is an active intrusion alert",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.intrusionMode",
+            "type": "state",
+            "common": {
+                "role": "text",
+                "name": "configured intrusion mode",
+                "type": "string",
+                "states": {
+                    "custom": "Custom",
+                    "night": "Night",
+                    "home": "Home",
+                    "away": "Away"
+                },
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.userAlarm",
+            "type": "state",
+            "common": {
+                "role": "indicator.alarm",
+                "name": "whether there is an active user alarm",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }
