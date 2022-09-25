@@ -1,19 +1,19 @@
 import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
-import type { Theme } from "@material-ui/core/styles";
+import withStyles from "@mui/styles/withStyles";
+import type { Theme } from "@mui/material/styles";
 
-import GenericApp from "@iobroker/adapter-react/GenericApp";
+import GenericApp from "@iobroker/adapter-react-v5/GenericApp";
 import Settings from "./components/settings";
-import { GenericAppProps, GenericAppSettings } from "@iobroker/adapter-react/types";
-import type { StyleRules } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Box from "@material-ui/core/Box";
-import Tab from "@material-ui/core/Tab";
-import Tabs from "@material-ui/core/Tabs";
+import { GenericAppProps, GenericAppSettings } from "@iobroker/adapter-react-v5/types";
+import type { StyleRules } from "@mui/styles";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import { Debug } from "./components/debug";
-import SettingsIcon from "@material-ui/icons/Settings";
-import DeveloperMode from "@material-ui/icons/DeveloperMode";
-import I18n from "@iobroker/adapter-react/i18n";
+import SettingsIcon from "@mui/icons-material/Settings";
+import DeveloperMode from "@mui/icons-material/DeveloperMode";
+import I18n from "@iobroker/adapter-react-v5/i18n";
 
 const styles = (_theme: Theme): StyleRules => ({
     root: {},
@@ -94,6 +94,8 @@ function AppContainer({
                     onChange={(e, newTab: number) => {
                         setSelectedTab(newTab);
                     }}
+                    indicatorColor="secondary"
+                    textColor="inherit"
                 >
                     <Tab icon={<SettingsIcon />} label={I18n.t("tab_settings")} />
                     {expertMode && <Tab icon={<DeveloperMode />} label={I18n.t("tab_debug")} />}

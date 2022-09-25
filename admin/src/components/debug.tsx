@@ -1,19 +1,19 @@
 import React from "react";
-import I18n from "@iobroker/adapter-react/i18n";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Grid from "@material-ui/core/Grid";
-import Modal from "@material-ui/core/Modal";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import TextField from "@material-ui/core/TextField";
+import I18n from "@iobroker/adapter-react-v5/i18n";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
+import Modal from "@mui/material/Modal";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
+import TextField from "@mui/material/TextField";
 import endOfDay from "date-fns/esm/endOfDay";
 import lightFormat from "date-fns/esm/lightFormat";
 import startOfDay from "date-fns/esm/startOfDay";
-import ExpandMore from "@material-ui/icons/ExpandMore";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
 export interface IDebugProps {
     sendMessage: (command: string, message: ioBroker.MessagePayload) => Promise<ioBroker.Message | undefined>;
@@ -96,6 +96,7 @@ function EventsRow({ sendMessage }: IDebugProps) {
             buttonText="debug_apievents_button"
             buttonRowGridItems={[
                 <TextField
+                    variant="standard"
                     key="from"
                     type="date"
                     label={I18n.t("debug_apievents_from")}
@@ -106,6 +107,7 @@ function EventsRow({ sendMessage }: IDebugProps) {
                     }}
                 />,
                 <TextField
+                    variant="standard"
                     key="to"
                     type="date"
                     label={I18n.t("debug_apievents_to")}
