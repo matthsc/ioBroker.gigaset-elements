@@ -138,7 +138,7 @@
         ],
         "dependencies": [
             {
-                "js-controller": ">=3.1.0"
+                "js-controller": ">=4.0.23"
             }
         ]
     },

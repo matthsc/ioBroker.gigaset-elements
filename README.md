@@ -18,8 +18,8 @@ Adapter for Gigaset Elements (https://gigaset.com/smart-home)
 
 ## Requirements
 
--   NodeJS >= 12.x
--   ioBroker >= 3.x, with admin >= 5.x
+-   NodeJS >= 14.x
+-   ioBroker >= 4.x, with admin >= 5.x
 -   Gigaset Elements system
 
 ## Installation
@@ -126,7 +126,9 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 
 ### **WORK IN PROGRESS**
 
+-   (matthsc) drop support for Node 12 and js-controller 3
 -   (matthsc) implement migrations from create-adapter
+-   (matthsc) dependency updates
 
 ### 0.2.2 (2022-09-17)
 
