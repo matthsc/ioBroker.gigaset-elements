@@ -20,9 +20,9 @@ loadEvents(true).then((eventRoot) => {
             } as Partial<GigasetElements> as GigasetElements;
         });
 
-        const assertMock = (mock: GigasetElements) => {
+        const assertMock = (mock: GigasetElements, logCallCount = 0) => {
             const errorSpy = mock.log.info as Sinon.SinonSpy;
-            assert.equal(errorSpy.callCount, 0);
+            assert.equal(errorSpy.callCount, logCallCount);
         };
 
         for (const event of eventRoot.events) {
@@ -31,5 +31,13 @@ loadEvents(true).then((eventRoot) => {
                 assertMock(adapterMock);
             });
         }
+
+        it("logs message for unknown event types", () => {
+            processEvent(adapterMock, {
+                ...eventRoot.events[0],
+                type: "unknown",
+            });
+            assertMock(adapterMock, 1);
+        });
     });
 });

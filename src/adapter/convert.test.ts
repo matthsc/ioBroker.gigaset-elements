@@ -1,7 +1,7 @@
 // tslint:disable:no-unused-expression
 
 import { assert } from "chai";
-import { IModesItem } from "gigaset-elements-api";
+import { IModesItem, loadElements } from "gigaset-elements-api";
 import { convertIntrusionModesToStatesValue, convertSensorStateToId } from "./convert";
 
 describe("convertSensorStateToId", () => {
@@ -28,6 +28,26 @@ describe("convertSensorStateToId", () => {
         assert.equal(convertSensorStateToId("open"), 2);
         assert.equal(convertSensorStateToId("probably_open"), 2);
         assert.equal(convertSensorStateToId("opened"), 2);
+    });
+
+    it("converts all states from test data", async () => {
+        const { bs01 } = await loadElements(true);
+        const positions = new Set(
+            bs01
+                .flatMap((b) => b.subelements)
+                .map((e) => e.positionStatus as string)
+                .filter((s) => !!s),
+        );
+        for (const state of positions) {
+            assert.doesNotThrow(
+                () => {
+                    convertSensorStateToId(state);
+                },
+                undefined,
+                undefined,
+                `${state} ${JSON.stringify([...positions])}`,
+            );
+        }
     });
 });
 
