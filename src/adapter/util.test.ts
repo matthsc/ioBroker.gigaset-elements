@@ -1,5 +1,3 @@
-// tslint:disable:no-unused-expression
-
 import { assert } from "chai";
 import {
     IEventsItem,

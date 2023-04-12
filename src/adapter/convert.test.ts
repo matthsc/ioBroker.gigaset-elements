@@ -1,5 +1,3 @@
-// tslint:disable:no-unused-expression
-
 import { assert } from "chai";
 import { IModesItem, loadElements } from "gigaset-elements-api";
 import { convertIntrusionModesToStatesValue, convertSensorStateToId } from "./convert";
