@@ -17,12 +17,12 @@ import {
 } from "./adapter";
 
 interface ITimeoutsKeys {
-    events: NodeJS.Timeout;
-    elements: NodeJS.Timeout;
-    setupConnection: NodeJS.Timeout;
+    events: ioBroker.Timeout;
+    elements: ioBroker.Timeout;
+    setupConnection: ioBroker.Timeout;
 }
 type ITimeouts = {
-    [key in keyof ITimeoutsKeys]: NodeJS.Timeout;
+    [key in keyof ITimeoutsKeys]: ioBroker.Timeout;
 } & ITimeoutsKeys;
 
 export class GigasetElements extends utils.Adapter {
@@ -126,7 +126,7 @@ export class GigasetElements extends utils.Adapter {
             const minutes = 1;
             this.log.info(`Stopping all timers and trying to reconnect in ${minutes} minutes`);
             this.stopTimers();
-            const timer = setTimeout(this.setupConnection, minutes * 60 * 1000);
+            const timer = this.setTimeout(this.setupConnection, minutes * 60 * 1000);
             this.timeouts.setupConnection = timer;
             return false;
         }
@@ -238,9 +238,8 @@ export class GigasetElements extends utils.Adapter {
             }
 
         if (!this.stopScheduling && !this.terminating) {
-            clearTimeout(this.timeouts[key]);
-            const timer = setTimeout(this.runAndSchedule, timeout * 1000, key, timeout, handler, false);
-            this.timeouts[key] = timer as unknown as NodeJS.Timeout;
+            this.clearTimeout(this.timeouts[key]);
+            this.timeouts[key] = this.setTimeout(this.runAndSchedule, timeout * 1000, key, timeout, handler, false);
         }
     };
 
@@ -249,7 +248,7 @@ export class GigasetElements extends utils.Adapter {
         this.stopScheduling = true;
         const keys = Object.keys(this.timeouts) as (keyof ITimeoutsKeys)[];
         keys.forEach((key) => {
-            clearTimeout(this.timeouts[key]);
+            this.clearTimeout(this.timeouts[key]);
         });
     }
 
