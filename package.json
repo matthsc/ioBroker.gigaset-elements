@@ -39,7 +39,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.14.2",
     "@mui/styles": "^5.14.1",
-    "@tsconfig/node18": "^2.0.1",
+    "@tsconfig/node18": "^18.2.1",
     "@types/chai": "^4.3.5",
     "@types/chai-as-promised": "^7.1.5",
     "@types/mocha": "^10.0.1",
