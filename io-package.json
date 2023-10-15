@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "gigaset-elements",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "news": {
+      "0.4.0": {
+        "en": "add support for plugs\ndrop support for Node 14 and 16\ndependency updates",
+        "de": "unterstützung für plugs hinzufügen\ndrop-Unterstützung für Node 14 und 16\nabhängigkeitsaktualisierung",
+        "ru": "добавить поддержку плагинов\nподдержка капель Node 14 и 16\nобновления зависимости",
+        "pt": "adicionar suporte para plugs\nsuporte para o nó 14 e 16\natualizações de dependência",
+        "nl": "steun voor stekkers\nvertaling:\nafhankelijke updates",
+        "fr": "ajouter le support pour les plugs\nsoutien à la baisse pour les No 14 et 16\nmises à jour de la dépendance",
+        "it": "aggiungere supporto per spine\nsupporto drop per Node 14 e 16\naggiornamenti di dipendenza",
+        "es": "añadir soporte para enchufes\napoyo para el Nodo 14 y 16\nactualizaciones de la dependencia",
+        "pl": "obsługa wtyczek\nwsparcie dla 14 i 16\naktualizacja",
+        "uk": "додати підтримку для штепсель\nпідтримка крапель Node 14 і 16\nоновлення залежності",
+        "zh-cn": "b. 增加对plugs的支持\n第14和第16号支助\n依赖性最新资料"
+      },
       "0.3.0": {
         "en": "drop support for Node 12 and js-controller 3\nimplement migrations from create-adapter\ndependency updates",
         "de": "drop-Unterstützung für Node 12 und js-Controller 3\nmigrationen von create-adapter implementieren\nabhängigkeitsaktualisierung",
@@ -74,18 +87,6 @@
         "es": "corregir la generación de datos de prueba\nactualizaciones de dependencia",
         "pl": "napraw generowanie danych testowych\naktualizacje zależności",
         "zh-cn": "修复测试数据生成\n依赖更新"
-      },
-      "0.1.1": {
-        "en": "implement adapter review feedback",
-        "de": "Feedback zur Adapterüberprüfung implementieren",
-        "ru": "внедрить отзыв об обзоре адаптера",
-        "pt": "implementar feedback de revisão do adaptador",
-        "nl": "feedback over adapterbeoordeling implementeren",
-        "fr": "mise en œuvre des commentaires sur l'examen de l'adaptateur",
-        "it": "implementare il feedback di revisione dell'adattatore",
-        "es": "implementar comentarios de revisión del adaptador",
-        "pl": "zaimplementuj opinię z przeglądu adaptera",
-        "zh-cn": "实施适配器审查反馈"
       }
     },
     "title": "Gigaset Elements",
