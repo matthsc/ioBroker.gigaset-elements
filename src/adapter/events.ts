@@ -34,6 +34,10 @@ export async function processEvent(adapter: ioBroker.Adapter, event: IEventsItem
         case "close":
             await adapter.setStateChangedAsync(getStateId(event, "position"), convertSensorStateToId(event.type), true);
             break;
+        case "on":
+        case "off":
+            await adapter.setStateChangedAsync(getStateId(event, "relay"), event.type === "on", true);
+            break;
         case "bs_online_notification":
         case "bs_offline_notification":
             await adapter.setStateChangedAsync(event.source_id + ".online", event.type.startsWith("bs_online"), true);
@@ -85,6 +89,7 @@ export async function processEvent(adapter: ioBroker.Adapter, event: IEventsItem
             // do nothing, since the end_sd01_test doesn't include sensor id and cannot be reset anymore, without guessing
             break;
         case "end_sd01_test":
+        case "end_wd01_water_detected":
             // event doesn't include sensor id :-(
             break;
         case "user_alarm_start":

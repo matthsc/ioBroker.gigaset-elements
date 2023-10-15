@@ -116,6 +116,32 @@ export async function createOrUpdateElementBs01(adapter: ioBroker.Adapter, eleme
                 getReadonlyStateObject({ name: "window/door state", type: "number", role: "value.window" }),
             ),
         );
+    if (element.states?.relay) {
+        statePromises.push(
+            adapter.extendObjectAsync(getStateId(element, "relay"), {
+                type: "state",
+                common: {
+                    name: "Relay",
+                    type: "boolean",
+                    role: "switch.power",
+                    read: true,
+                    write: true,
+                },
+            }),
+        );
+        statePromises.push(
+            adapter.extendObjectAsync(getStateId(element, "relayButton"), {
+                type: "state",
+                common: {
+                    name: "Button",
+                    type: "boolean",
+                    role: "button",
+                    read: false,
+                    write: true,
+                },
+            }),
+        );
+    }
     if (element.states?.temperature)
         statePromises.push(
             adapter.extendObjectAsync(
@@ -236,6 +262,8 @@ export async function updateElementBs01(adapter: ioBroker.Adapter, element: ISub
                 true,
             ),
         );
+    if (element.states?.relay)
+        updates.push(adapter.setStateChangedAsync(getStateId(element, "relay"), element.states.relay === "on", true));
     if (element.states?.temperature)
         updates.push(
             adapter.setStateChangedAsync(getStateId(element, "temperature"), element.states.temperature, true),

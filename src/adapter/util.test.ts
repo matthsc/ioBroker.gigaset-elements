@@ -127,6 +127,7 @@ Promise.all([loadBaseStations(true), loadElements(true), loadEvents(true)]).then
                 "user_alarm_end",
                 "user_alarm_start",
                 "end_sd01_test",
+                "end_wd01_water_detected",
             ];
             for (const event of eventsData.events.filter((e) => !emptyEvents.includes(e.type))) {
                 assertId(event);

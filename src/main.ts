@@ -43,7 +43,7 @@ export class GigasetElements extends utils.Adapter {
             name: "gigaset-elements",
         });
         this.on("ready", this.onReady.bind(this));
-        // this.on("stateChange", this.onStateChange.bind(this));
+        this.on("stateChange", this.onStateChange.bind(this));
         // this.on("objectChange", this.onObjectChange.bind(this));
         this.on("message", this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
@@ -89,6 +89,7 @@ export class GigasetElements extends utils.Adapter {
 
         // connect to GE cloud
         await this.setupConnection();
+        for (const state of ["*.relay", "*.relayButton"]) await this.subscribeStatesAsync(state);
     };
 
     /** helper method for determining human-friendly error messages */
@@ -171,7 +172,7 @@ export class GigasetElements extends utils.Adapter {
             this.log.debug("Starting timers for periodic events/elements retrieval...");
             this.stopScheduling = false; // enebale scheduling of timers
             this.runAndSchedule("elements", this.config.elementInterval * 60, this.refreshElements, true);
-            this.runAndSchedule("events", this.config.eventInterval, this.refreshEvents);
+            this.runAndScheduleEvents();
 
             this.log.info("Successfully connected to Gigaset Elements cloud and initialized states");
         } catch (err: unknown) {
@@ -179,6 +180,10 @@ export class GigasetElements extends utils.Adapter {
             this.log.info("Restarting due to previous error...");
             this.restart();
         }
+    };
+
+    private runAndScheduleEvents = (): void => {
+        this.runAndSchedule("events", this.config.eventInterval, this.refreshEvents);
     };
 
     /** retrieve and update elements */
@@ -229,6 +234,8 @@ export class GigasetElements extends utils.Adapter {
         scheduleOnly?: boolean,
     ): Promise<void> => {
         if (timeout <= 0) return;
+
+        this.clearTimeout(this.timeouts[key]);
 
         if (!scheduleOnly)
             try {
@@ -282,18 +289,49 @@ export class GigasetElements extends utils.Adapter {
     //     }
     // }
 
-    // /**
-    //  * Is called if a subscribed state changes
-    //  */
-    // private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
-    //     if (state) {
-    //         // The state was changed
-    //         this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-    //     } else {
-    //         // The state was deleted
-    //         this.log.info(`state ${id} deleted`);
-    //     }
-    // }
+    /**
+     * Is called if a subscribed state changes
+     */
+    private async onStateChange(id: string, state: ioBroker.State | null | undefined): Promise<void> {
+        if (!state) {
+            // The state was deleted
+            return;
+        }
+        if (state.ack) {
+            // ignore acknowledged states
+            return;
+        }
+
+        this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+
+        try {
+            const idParts = id.split(".");
+            const baseStationId = idParts[2];
+            const elementId = idParts[3].split("-")[1];
+            const stateName = idParts[4];
+
+            switch (stateName) {
+                case "relay":
+                    await this.api.sendCommand(baseStationId, elementId, state.val ? "on" : "off");
+                    await this.delay(5000); // if we refresh to fast, the event is not yet available
+                    this.runAndScheduleEvents();
+                    break;
+                case "relayButton":
+                    const idRelay = [...idParts];
+                    idRelay[4] = "relay";
+                    const current = await this.getStateAsync(idRelay.join("."));
+                    await this.api.sendCommand(baseStationId, elementId, !current!.val ? "on" : "off");
+                    await this.delay(5000); // if we refresh to fast, the event is not yet available
+                    this.runAndScheduleEvents();
+                    break;
+                default:
+                    this.log.error("Invalid state changed: " + id);
+            }
+        } catch (err: any) {
+            this.log.error(`Error processing state change for ${id} (val=${state.val}): ${err.message}`);
+            this.log.debug(err.toString());
+        }
+    }
 
     /**
      * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...

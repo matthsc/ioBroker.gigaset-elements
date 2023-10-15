@@ -44,12 +44,13 @@ The adapter currently only reads data and does not allow to change anything.
 
 So far, the adapter has been tested/is known to work with the following Elements, and test data is available via [gigaset-elements-api](https://github.com/matthsc/gigaset-elements-api):
 
-| Element type | Element name            | Tested by   |
-| ------------ | ----------------------- | ----------- |
-| is01         | Siren                   | matthsc     |
-| um01         | Universal/Window/Door   | matthsc     |
-| wd01         | Water                   | matthsc     |
-| sd01         | Smoke (only test alarm) | HomeControl |
+| Element type | Element name            | Tested by                                                             |
+| ------------ | ----------------------- | --------------------------------------------------------------------- |
+| is01         | Siren                   | matthsc                                                               |
+| um01         | Universal/Window/Door   | matthsc                                                               |
+| wd01         | Water                   | matthsc                                                               |
+| sd01         | Smoke (only test alarm) | HomeControl                                                           |
+| sp01         | Plug                    | matthsc (hardware sponsored by [Voggl93](https://github.com/Voggl93)) |
 
 The adapter also supports the following other devices:
 
@@ -128,6 +129,7 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 
 ### **WORK IN PROGRESS**
 
+-   (matthsc) add support for plugs
 -   (matthsc) drop support for Node 14 and 16
 -   (matthsc/dependabot) dependency updates
 
