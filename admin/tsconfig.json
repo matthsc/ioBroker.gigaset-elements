@@ -8,7 +8,7 @@
         "sourceMap": true,
         "sourceRoot": "./src",
         "noImplicitAny": false,
-        "lib": ["es2018", "DOM"],
+        "lib": ["es2023", "DOM"],
 
         "jsx": "react"
     },

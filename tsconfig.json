@@ -36,7 +36,10 @@
 
         "sourceMap": true,
         "inlineSourceMap": false,
-        "watch": false
+
+        "esModuleInterop": true,
+        "module": "CommonJS",
+        "moduleResolution": "Node"
     },
     "include": ["src/**/*.ts"],
     "exclude": ["build/**", "node_modules/**"]
