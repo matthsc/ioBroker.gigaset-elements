@@ -65,7 +65,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rimraf": "^5.0.5",
-    "sinon": "^16.1.0",
+    "sinon": "^17.0.0",
     "sinon-chai": "^3.7.0",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",
