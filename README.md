@@ -126,6 +126,11 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (matthsc/dependabot) dependency updates
+
 ### 0.4.0 (2023-10-15)
 
 -   (matthsc) add support for plugs
