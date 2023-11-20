@@ -109,6 +109,13 @@ export async function createOrUpdateElementBs01(adapter: ioBroker.Adapter, eleme
                 getReadonlyStateObject({ name: "battery state", type: "string", role: "text" }),
             ),
         );
+    if (element.batterySaverMode)
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "batterySaverMode"),
+                getReadonlyStateObject({ name: "battery saver mode", type: "mixed", role: "text" }),
+            ),
+        );
     if (element.positionStatus)
         statePromises.push(
             adapter.extendObjectAsync(
@@ -216,6 +223,32 @@ export async function createOrUpdateElementBs01(adapter: ioBroker.Adapter, eleme
                 getReadonlyStateObject({ name: "smokeDetectorOff", type: "boolean", role: "indicator" }),
             ),
         );
+    if (element.states.momentaryPowerMeasurement)
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "momentaryPowerMeasurement"),
+                getReadonlyStateObject({
+                    name: "momentaryPowerMeasurement",
+                    type: "mixed",
+                    role: "value.power",
+                    unit: "°C",
+                }),
+            ),
+        );
+    if (element.states?.setPoint)
+        statePromises.push(
+            adapter.extendObjectAsync(
+                getStateId(element, "setPoint"),
+                getReadonlyStateObject({
+                    name: "setPoint",
+                    type: "number",
+                    role: "value.temperature",
+                    unit: "°C",
+                    min: 5,
+                    max: 30,
+                }),
+            ),
+        );
 
     await Promise.all(statePromises);
     await updateElementBs01(adapter, element);
@@ -254,6 +287,14 @@ export async function updateElementBs01(adapter: ioBroker.Adapter, element: ISub
         updates.push(adapter.setStateChangedAsync(getStateId(element, "roomName"), element.room.friendlyName, true));
     if (element.batteryStatus)
         updates.push(adapter.setStateChangedAsync(getStateId(element, "battery"), element.batteryStatus, true));
+    if (element.batterySaverMode)
+        updates.push(
+            adapter.setStateChangedAsync(
+                getStateId(element, "batterySaverMode"),
+                element.batterySaverMode as ioBroker.StateValue,
+                true,
+            ),
+        );
     if (element.positionStatus)
         updates.push(
             adapter.setStateChangedAsync(
@@ -307,6 +348,22 @@ export async function updateElementBs01(adapter: ioBroker.Adapter, element: ISub
     if (isDefined(element, "smokeDetectorOff"))
         updates.push(
             adapter.setStateChangedAsync(getStateId(element, "smokeDetectorOff"), element.smokeDetectorOff!, true),
+        );
+    if (isDefined(element.states, "momentaryPowerMeasurement"))
+        updates.push(
+            adapter.setStateChangedAsync(
+                getStateId(element, "momentaryPowerMeasurement"),
+                element.states!.momentaryPowerMeasurement! as ioBroker.StateValue,
+                true,
+            ),
+        );
+    if (isDefined(element.states, "setPoint"))
+        updates.push(
+            adapter.setStateChangedAsync(
+                getStateId(element, "setPoint"),
+                element.states!.setPoint! as ioBroker.StateValue,
+                true,
+            ),
         );
 
     await Promise.all(updates);

@@ -129,6 +129,7 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 
 ### **WORK IN PROGRESS**
 
+-   (matthsc) add states for batterySaverMode, momentaryPowerMeasurement (plug), setPoint (thermostat)
 -   (matthsc) allow to change intrusion mode
 -   (matthsc) allow to trigger user alarm
 -   (matthsc) add info.systemHealth state
