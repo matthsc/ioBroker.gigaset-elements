@@ -246,6 +246,7 @@ export async function createOrUpdateElementBs01(adapter: ioBroker.Adapter, eleme
                     unit: "°C",
                     min: 5,
                     max: 30,
+                    write: true,
                 }),
             ),
         );

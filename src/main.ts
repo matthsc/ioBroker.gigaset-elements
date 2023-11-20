@@ -92,7 +92,7 @@ export class GigasetElements extends utils.Adapter {
 
         // connect to GE cloud
         await this.setupConnection();
-        for (const state of ["*.relay", "*.relayButton", "info.userAlarm", "info.intrusionMode"])
+        for (const state of ["*.relay", "*.relayButton", "*.setPoint", "info.userAlarm", "info.intrusionMode"])
             await this.subscribeStatesAsync(state);
     };
 
@@ -349,6 +349,10 @@ export class GigasetElements extends utils.Adapter {
                         idRelay[4] = "relay";
                         const current = await this.getStateAsync(idRelay.join("."));
                         await this.api.sendCommand(baseStationId, elementId, !current!.val ? "on" : "off");
+                        await this.runAndScheduleEvents(true);
+                        break;
+                    case "setPoint":
+                        await this.api.setThermostat(baseStationId, elementId, state.val as number);
                         await this.runAndScheduleEvents(true);
                         break;
                     default:
