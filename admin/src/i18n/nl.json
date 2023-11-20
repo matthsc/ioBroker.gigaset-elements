@@ -34,5 +34,7 @@
     "debug_apievents_description": "Laadt alle gebeurtenissen in het opgegeven tijdbereik van de Gigaset Elements API en geeft ze weer.",
     "debug_apievents_button": "Gebeurtenissen laden",
     "debug_apievents_from": "Van",
-    "debug_apievents_to": "Naar"
+    "debug_apievents_to": "Naar",
+    "systemHealthInterval": "Systeemstatusinterval",
+    "systemHealthInterval_description": "Minuten waarna de systeemstatus moet worden opgevraagd (rood, oranje, groen)"
 }

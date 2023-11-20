@@ -17,6 +17,7 @@ import {
 } from "./adapter";
 
 interface ITimeoutsKeys {
+    systemHealth: ioBroker.Timeout;
     events: ioBroker.Timeout;
     elements: ioBroker.Timeout;
     setupConnection: ioBroker.Timeout;
@@ -36,6 +37,8 @@ export class GigasetElements extends utils.Adapter {
     private terminating = false;
     /** whether we should stop scheduling new jobs, i.e. when cloud is under maintenance */
     private stopScheduling = true;
+    /** id of the first base station */
+    private baseStationId?: string;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -89,7 +92,8 @@ export class GigasetElements extends utils.Adapter {
 
         // connect to GE cloud
         await this.setupConnection();
-        for (const state of ["*.relay", "*.relayButton"]) await this.subscribeStatesAsync(state);
+        for (const state of ["*.relay", "*.relayButton", "info.userAlarm", "info.intrusionMode"])
+            await this.subscribeStatesAsync(state);
     };
 
     /** helper method for determining human-friendly error messages */
@@ -161,6 +165,7 @@ export class GigasetElements extends utils.Adapter {
             // load base stations
             this.log.debug("Loading basestation data...");
             const baseStations = await this.api.getBaseStations();
+            this.baseStationId = baseStations.length ? baseStations[0].id : undefined;
             await createOrUpdateBasestations(this, baseStations);
 
             // load elements
@@ -171,6 +176,7 @@ export class GigasetElements extends utils.Adapter {
             // set up timers for periodic events and elements retrieval
             this.log.debug("Starting timers for periodic events/elements retrieval...");
             this.stopScheduling = false; // enebale scheduling of timers
+            this.runAndSchedule("systemHealth", this.config.systemHealthInterval * 60, this.refreshSystemHealth, false);
             this.runAndSchedule("elements", this.config.elementInterval * 60, this.refreshElements, true);
             this.runAndScheduleEvents();
 
@@ -182,8 +188,17 @@ export class GigasetElements extends utils.Adapter {
         }
     };
 
-    private runAndScheduleEvents = (): void => {
-        this.runAndSchedule("events", this.config.eventInterval, this.refreshEvents);
+    private runAndScheduleEvents = async (delay?: boolean): Promise<void> => {
+        if (delay) await this.delay(5000); // if we refresh too fast after changes, the event is not yet available
+
+        await this.runAndSchedule("events", this.config.eventInterval, this.refreshEvents);
+    };
+
+    /** refresh system health status */
+    private refreshSystemHealth = async (): Promise<void> => {
+        this.log.debug("Updating system health");
+        const systemHealth = await this.api.getSystemHealth();
+        await this.setStateChangedAsync("info.systemHealth", systemHealth.systemHealth, true);
     };
 
     /** retrieve and update elements */
@@ -306,26 +321,39 @@ export class GigasetElements extends utils.Adapter {
 
         try {
             const idParts = id.split(".");
-            const baseStationId = idParts[2];
-            const elementId = idParts[3].split("-")[1];
-            const stateName = idParts[4];
+            if (idParts.length == 4 && idParts[2] === "info") {
+                switch (idParts[3]) {
+                    case "userAlarm":
+                        await this.api.setUserAlarm(state.val as boolean);
+                        await this.runAndScheduleEvents(true);
+                        break;
+                    case "intrusionMode":
+                        await this.api.setAlarmMode(this.baseStationId as string, state.val as any);
+                        await this.runAndScheduleEvents(true);
+                        break;
+                    default:
+                        this.log.error("Invalid info state changed: " + id);
+                }
+            } else {
+                const baseStationId = idParts[2];
+                const elementId = idParts[3].split("-")[1];
+                const stateName = idParts[4];
 
-            switch (stateName) {
-                case "relay":
-                    await this.api.sendCommand(baseStationId, elementId, state.val ? "on" : "off");
-                    await this.delay(5000); // if we refresh to fast, the event is not yet available
-                    this.runAndScheduleEvents();
-                    break;
-                case "relayButton":
-                    const idRelay = [...idParts];
-                    idRelay[4] = "relay";
-                    const current = await this.getStateAsync(idRelay.join("."));
-                    await this.api.sendCommand(baseStationId, elementId, !current!.val ? "on" : "off");
-                    await this.delay(5000); // if we refresh to fast, the event is not yet available
-                    this.runAndScheduleEvents();
-                    break;
-                default:
-                    this.log.error("Invalid state changed: " + id);
+                switch (stateName) {
+                    case "relay":
+                        await this.api.sendCommand(baseStationId, elementId, state.val ? "on" : "off");
+                        await this.runAndScheduleEvents(true);
+                        break;
+                    case "relayButton":
+                        const idRelay = [...idParts];
+                        idRelay[4] = "relay";
+                        const current = await this.getStateAsync(idRelay.join("."));
+                        await this.api.sendCommand(baseStationId, elementId, !current!.val ? "on" : "off");
+                        await this.runAndScheduleEvents(true);
+                        break;
+                    default:
+                        this.log.error("Invalid element state changed: " + id);
+                }
             }
         } catch (err: any) {
             this.log.error(`Error processing state change for ${id} (val=${state.val}): ${err.message}`);

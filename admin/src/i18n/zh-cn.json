@@ -34,5 +34,7 @@
     "debug_apievents_description": "从 Gigaset Elements API 加载给定时间范围内的所有事件并显示它们。",
     "debug_apievents_button": "加载事件",
     "debug_apievents_from": "从",
-    "debug_apievents_to": "到"
+    "debug_apievents_to": "到",
+    "systemHealthInterval": "系统健康间隔",
+    "systemHealthInterval_description": "轮询系统运行状况的分钟数（红色、橙色、绿色）"
 }

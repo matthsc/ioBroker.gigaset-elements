@@ -34,5 +34,7 @@
     "debug_apievents_description": "Wczytuje wszystkie zdarzenia w podanym zakresie czasu z interfejsu Gigaset Elements API i wyświetla je.",
     "debug_apievents_button": "Załaduj zdarzenia",
     "debug_apievents_from": "Z",
-    "debug_apievents_to": "Do"
+    "debug_apievents_to": "Do",
+    "systemHealthInterval": "Interwał kondycji systemu",
+    "systemHealthInterval_description": "Minuty, po których należy sondować stan systemu (czerwony, pomarańczowy, zielony)"
 }

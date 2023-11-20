@@ -34,5 +34,7 @@
     "debug_apievents_description": "Carga todos los eventos en el rango de tiempo dado desde la API de Gigaset Elements y los muestra.",
     "debug_apievents_button": "Cargar eventos",
     "debug_apievents_from": "Desde",
-    "debug_apievents_to": "A"
+    "debug_apievents_to": "A",
+    "systemHealthInterval": "Intervalo de salud del sistema",
+    "systemHealthInterval_description": "Minutos después de los cuales sondear el estado de salud del sistema (rojo, naranja, verde)"
 }

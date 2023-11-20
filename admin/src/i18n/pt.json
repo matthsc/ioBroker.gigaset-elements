@@ -34,5 +34,7 @@
     "debug_apievents_description": "Carrega todos os eventos no intervalo de tempo determinado da API do Gigaset Elements e os exibe.",
     "debug_apievents_button": "Carregar eventos",
     "debug_apievents_from": "A partir de",
-    "debug_apievents_to": "Para"
+    "debug_apievents_to": "Para",
+    "systemHealthInterval": "Intervalo de integridade do sistema",
+    "systemHealthInterval_description": "Minutos após os quais pesquisar o status de integridade do sistema (vermelho, laranja, verde)"
 }

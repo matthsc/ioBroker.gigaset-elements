@@ -13,6 +13,8 @@
     "eventInterval_description": "Sekunden zum Abrufen von Ereignisdaten wie Öffnen/Schließen von Fenstern/Türen, Alarme, ...",
     "elementInterval": "Elementintervall",
     "elementInterval_description": "Minuten zum Abrufen von Element-/Sensordaten wie Temperatur, Luftdruck, ...",
+    "systemHealthInterval": "Systemhealthintervall",
+    "systemHealthInterval_description": "Minuten zum Abrufen des system health status (rot, orange, grün)",
     "tab_settings": "Einstellungen",
     "tab_debug": "Debuggen",
     "debug_ping_title": "Test - Ping",

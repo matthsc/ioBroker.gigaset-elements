@@ -162,6 +162,12 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                             "elementInterval_description",
                             "number",
                         )}
+                        {this.renderInput(
+                            "systemHealthInterval",
+                            "systemHealthInterval",
+                            "systemHealthInterval_description",
+                            "number",
+                        )}
                     </Grid>
                 </Box>
             </form>

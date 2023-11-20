@@ -7,6 +7,7 @@ declare global {
             email: string;
             pass: string;
             authInterval: number;
+            systemHealthInterval: number;
             eventInterval: number;
             elementInterval: number;
         }

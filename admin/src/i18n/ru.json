@@ -34,5 +34,7 @@
     "debug_apievents_description": "Загружает все события в заданном временном диапазоне из Gigaset Elements API и отображает их.",
     "debug_apievents_button": "Загрузить события",
     "debug_apievents_from": "От",
-    "debug_apievents_to": "К"
+    "debug_apievents_to": "К",
+    "systemHealthInterval": "Интервал работоспособности системы",
+    "systemHealthInterval_description": "Минуты, после которых можно опросить состояние работоспособности системы (красный, оранжевый, зеленый)"
 }

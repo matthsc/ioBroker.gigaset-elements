@@ -14,6 +14,8 @@
     "eventInterval_description": "Seconds after which to poll event data like window/door open/close, alarms, ...",
     "elementInterval": "Element interval",
     "elementInterval_description": "Minutes after which to poll element/sensor data like temperature, air pressure, ...",
+    "systemHealthInterval": "System health interval",
+    "systemHealthInterval_description": "Minutes after which to poll system health status (red, orange, green)",
     "tab_debug": "Debug",
     "debug_ping_title": "Test - Ping",
     "debug_ping_description": "Sends a simple ping message to the adapter, which should be answered with a pong.",

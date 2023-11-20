@@ -129,6 +129,9 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
 
 ### **WORK IN PROGRESS**
 
+-   (matthsc) allow to change intrusion mode
+-   (matthsc) allow to trigger user alarm
+-   (matthsc) add info.systemHealth state
 -   (matthsc/dependabot) dependency updates
 
 ### 0.4.0 (2023-10-15)
