@@ -21,7 +21,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.8",
+    "@iobroker/adapter-core": "^3.0.4",
     "gigaset-elements-api": "0.5.2",
     "tslib": "^2.6.2"
   },
