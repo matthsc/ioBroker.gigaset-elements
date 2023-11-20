@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "gigaset-elements",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "news": {
+      "0.4.2": {
+        "en": "downgrade typescript to fix integration tests",
+        "de": "downgrade typescript zur fixierung von integrationstests",
+        "ru": "downgrade typescript для исправления интеграционных тестов",
+        "pt": "downgrade typescript para corrigir testes de integração",
+        "nl": "downgrade typescript om integratietests te repareren",
+        "fr": "typescript downgrade pour fixer les tests d'intégration",
+        "it": "typescript downgrade per correggere i test di integrazione",
+        "es": "tiposcript degradado para fijar pruebas de integración",
+        "pl": "niskopoziomowy typ maszynowy",
+        "uk": "javascript licenses api веб-сайт",
+        "zh-cn": "定级化试验"
+      },
       "0.4.1": {
         "en": "add states for batterySaverMode, momentaryPowerMeasurement (plug), setPoint (thermostat)\nallow to change setPoint for thermostat (experimental/untested)\nallow to change intrusion mode\nallow to trigger user alarm\nadd info.systemHealth state\ndependency updates",
         "de": "zustände für Batterie hinzufügen SaverMode, MomentaryPowerMeasurement (plug), setPoint (Thermostat)\nsetPoint für Thermostat ändern (erfahren/nicht getestet)\nintrusionsmodus ändern\nbenutzeralarm auslösen\nadd info.systemGesundheitszustand\nabhängigkeitsaktualisierung",
@@ -80,19 +93,6 @@
         "pl": "dodaj wsparcie dla telefonów\ndodaj Węzeł 18 do macierzy testowej\naktualizacje zależności",
         "zh-cn": "添加对手机的支持\n将节点 18 添加到测试矩阵\n依赖更新",
         "uk": "додати підтримку для телефонів\nдодати вузол 18 до тестової матриці\nоновлення залежностей"
-      },
-      "0.1.3": {
-        "en": "fix \"unknown\" element position state\nadd more tests\ndependency updates",
-        "de": "\"unbekannter\" Elementpositionsstatus behoben\nweitere Prüfungen hinzufügen\nAbhängigkeitsaktualisierungen",
-        "ru": "исправить положение \"неизвестного\" элемента\nдобавить больше тестов\nобновления зависимостей",
-        "pt": "corrigir o estado de posição do elemento \"desconhecido\"\nadicionar mais testes\natualizações de dependência",
-        "nl": "fix \"onbekende\" status van elementpositie\nmeer testen toevoegen\nafhankelijkheidsupdates",
-        "fr": "correction de l'état de position de l'élément \"inconnu\"\najouter plus de tests\nmises à jour des dépendances",
-        "it": "correggere lo stato di posizione dell'elemento \"sconosciuto\".\naggiungi altri test\naggiornamenti delle dipendenze",
-        "es": "corregir el estado de posición del elemento \"desconocido\"\nañadir más pruebas\nactualizaciones de dependencia",
-        "pl": "napraw \"nieznany\" stan pozycji elementu;\ndodaj więcej testów\naktualizacje zależności",
-        "zh-cn": "修复“未知”元素位置状态\n添加更多测试\n依赖更新",
-        "uk": "виправити \"невідомий\" стан позиції елемента\nдодати більше тестів\nоновлення залежностей"
       }
     },
     "title": "Gigaset Elements",
