@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "gigaset-elements",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "news": {
+      "0.4.3": {
+        "en": "bugfix",
+        "de": "fehlerbehebung",
+        "ru": "багфикс",
+        "pt": "correção de erros",
+        "nl": "vuur",
+        "fr": "bugfix",
+        "it": "bugfix",
+        "es": "bugfix",
+        "pl": "trąbka",
+        "uk": "шемале",
+        "zh-cn": "b ugfix"
+      },
       "0.4.2": {
         "en": "downgrade typescript to fix integration tests",
         "de": "downgrade typescript zur fixierung von integrationstests",
@@ -80,19 +93,6 @@
         "pl": "początkowe wsparcie\naktualizacja",
         "zh-cn": "增加吸烟探测器的初步支助\n依赖性最新资料",
         "uk": "додати початкову підтримку для детекторів диму\nоновлення залежностей"
-      },
-      "0.2.0": {
-        "en": "add support for phones\nadd Node 18 to test matrix\ndependency updates",
-        "de": "Unterstützung für Telefone hinzufügen\nKnoten 18 zur Testmatrix hinzufügen\nAbhängigkeitsaktualisierungen",
-        "ru": "добавить поддержку телефонов\nдобавить узел 18 в тестовую матрицу\nобновления зависимостей",
-        "pt": "adicionar suporte para telefones\nadicione o nó 18 à matriz de teste\natualizações de dependência",
-        "nl": "ondersteuning voor telefoons toevoegen\nvoeg Knooppunt 18 toe aan de testmatrix\nafhankelijkheidsupdates",
-        "fr": "ajouter le support pour les téléphones\najouter le nœud 18 à la matrice de test\nmises à jour des dépendances",
-        "it": "aggiungi il supporto per i telefoni\naggiungi il nodo 18 per testare la matrice\naggiornamenti delle dipendenze",
-        "es": "añadir soporte para teléfonos\nagregue el nodo 18 a la matriz de prueba\nactualizaciones de dependencia",
-        "pl": "dodaj wsparcie dla telefonów\ndodaj Węzeł 18 do macierzy testowej\naktualizacje zależności",
-        "zh-cn": "添加对手机的支持\n将节点 18 添加到测试矩阵\n依赖更新",
-        "uk": "додати підтримку для телефонів\nдодати вузол 18 до тестової матриці\nоновлення залежностей"
       }
     },
     "title": "Gigaset Elements",
