@@ -223,7 +223,7 @@ export async function createOrUpdateElementBs01(adapter: ioBroker.Adapter, eleme
                 getReadonlyStateObject({ name: "smokeDetectorOff", type: "boolean", role: "indicator" }),
             ),
         );
-    if (element.states.momentaryPowerMeasurement)
+    if (element.states?.momentaryPowerMeasurement)
         statePromises.push(
             adapter.extendObjectAsync(
                 getStateId(element, "momentaryPowerMeasurement"),

@@ -123,6 +123,11 @@ sendTo("gigaset-elements.0", "test", { action: "load-events", from: Date, to: Da
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (matthsc) bugfix
+
 ### 0.4.2 (2023-11-20)
 
 -   (matthsc) downgrade typescript to fix integration tests
