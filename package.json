@@ -34,7 +34,7 @@
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
     "@iobroker/adapter-dev": "^1.2.0",
-    "@iobroker/adapter-react-v5": "^4.7.3",
+    "@iobroker/adapter-react-v5": "^4.9.10",
     "@iobroker/testing": "^4.1.0",
     "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.15.7",
