@@ -5,19 +5,13 @@ import theme from "@iobroker/adapter-react-v5/Theme";
 import Utils from "@iobroker/adapter-react-v5/Components/Utils";
 import App from "./app";
 
-let themeName = Utils.getThemeName();
+const themeName = Utils.getThemeName();
 
 function build(): void {
     render(
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme(themeName)}>
-                <App
-                    adapterName="gigaset-elements"
-                    onThemeChange={(_theme) => {
-                        themeName = _theme;
-                        build();
-                    }}
-                />
+                <App adapterName="gigaset-elements" />
             </ThemeProvider>
         </StyledEngineProvider>,
         document.getElementById("root") as HTMLElement,

@@ -16,7 +16,7 @@ import startOfDay from "date-fns/esm/startOfDay";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 export interface IDebugProps {
-    sendMessage: (command: string, message: ioBroker.MessagePayload) => Promise<ioBroker.Message | undefined>;
+    sendMessage: (command: string, message: any) => Promise<any>;
 }
 
 export function Debug(props: IDebugProps) {

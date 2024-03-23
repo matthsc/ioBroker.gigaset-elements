@@ -15,7 +15,7 @@ loadBaseStations(true).then((elementRoot) => {
                 setStateChangedAsync: setStateAsyncMock,
                 log: {
                     info: Sinon.fake(),
-                } as Partial<ioBroker.Logger> as ioBroker.Logger,
+                } as Partial<ioBroker.Logger> as ioBroker.Logger as ioBroker.Log,
             } as Partial<GigasetElements> as GigasetElements;
         });
 

@@ -1,6 +1,7 @@
 /*
  * Created with @iobroker/create-adapter v2.0.1
  */
+import "@iobroker/types";
 
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
@@ -131,7 +132,7 @@ export class GigasetElements extends utils.Adapter {
             const minutes = 1;
             this.log.info(`Stopping all timers and trying to reconnect in ${minutes} minutes`);
             this.stopTimers();
-            const timer = this.setTimeout(this.setupConnection, minutes * 60 * 1000);
+            const timer = this.setTimeout(this.setupConnection, minutes * 60 * 1000)!;
             this.timeouts.setupConnection = timer;
             return false;
         }
@@ -261,7 +262,14 @@ export class GigasetElements extends utils.Adapter {
 
         if (!this.stopScheduling && !this.terminating) {
             this.clearTimeout(this.timeouts[key]);
-            this.timeouts[key] = this.setTimeout(this.runAndSchedule, timeout * 1000, key, timeout, handler, false);
+            this.timeouts[key] = this.setTimeout(
+                this.runAndSchedule as any,
+                timeout * 1000,
+                key,
+                timeout,
+                handler,
+                false,
+            )!;
         }
     };
 

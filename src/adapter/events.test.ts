@@ -16,7 +16,7 @@ loadEvents(true).then((eventRoot) => {
                 setStateAsync: resolveFake,
                 log: {
                     info: Sinon.fake(),
-                } as Partial<ioBroker.Logger> as ioBroker.Logger,
+                } as Partial<ioBroker.Logger> as ioBroker.Logger as ioBroker.Log,
             } as Partial<GigasetElements> as GigasetElements;
         });
 

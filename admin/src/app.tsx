@@ -54,7 +54,9 @@ class App extends GenericApp {
                 <AppContainer
                     expertMode={this.getExpertMode()}
                     native={this.state.native as ioBroker.AdapterConfig}
-                    updateNativeValue={this.updateNativeValue.bind(this)}
+                    updateNativeValue={(attr: string, value: unknown) => {
+                        this.updateNativeValue(attr, value, () => {});
+                    }}
                     sendMessage={(command, message) => {
                         const to = `${this.adapterName}.${this.instance}`;
                         return this.socket.sendTo(to, command, message);
@@ -79,7 +81,7 @@ function AppContainer({
     expertMode: boolean;
     native: ioBroker.AdapterConfig;
     updateNativeValue: (attr: string, value: unknown) => void;
-    sendMessage: (command: string, message?: ioBroker.MessagePayload) => Promise<ioBroker.Message | undefined>;
+    sendMessage: (command: string, message?: any) => Promise<any>;
 }) {
     const [selectedTab, setSelectedTab] = React.useState<number>(() => {
         return 0;
