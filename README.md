@@ -1,3 +1,7 @@
+⚠️ This project has been archived, since Gigaset has disabled its smart home cloud services ⚠️
+
+More information: [1](https://www.gigaset.com/hq_en/cms/smart-home-overview.html) [2](https://service.gigaset.com/en/support/solutions/articles/75000121636-deactivation-of-services-smart-home-care)
+
 ![Logo](admin/gigaset-elements.png)
 
 # ioBroker.gigaset-elements
